@@ -1,0 +1,26 @@
+{
+  "name": "remotion-render-template",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio",
+    "build": "remotion render Video out/video.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.448",
+    "@remotion/google-fonts": "4.0.448",
+    "@remotion/lottie": "4.0.448",
+    "@remotion/media-utils": "4.0.448",
+    "@remotion/paths": "4.0.448",
+    "@remotion/shapes": "4.0.448",
+    "@remotion/transitions": "4.0.448",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.448"
+  },
+  "devDependencies": {
+    "@types/node": "20.11.30",
+    "@types/react": "18.3.1",
+    "typescript": "5.4.5"
+  }
+}
