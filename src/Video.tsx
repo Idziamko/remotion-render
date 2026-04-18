@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   useCurrentFrame,
+  useVideoConfig,
   interpolate,
   Easing,
   AbsoluteFill,
@@ -21,14 +22,14 @@ export const compositionConfig = {
 // STYLES & THEME
 // =============================================================================
 const COLORS = {
-  bgCenter: '#1E3A8A',
-  bgEdge: '#020617',
+  bgCenter: '#1E3A8A', 
+  bgEdge: '#020617',   
   grid: 'rgba(255, 255, 255, 0.06)',
-  accentYellow: '#FACC15',
+  accentYellow: '#FACC15', 
   textWhite: '#FFFFFF',
   textGray: '#94A3B8',
   glassBg: 'rgba(15, 23, 42, 0.65)',
-  glassBorder: 'rgba(250, 204, 21, 0.5)',
+  glassBorder: 'rgba(250, 204, 21, 0.5)', 
   neonGlow: 'rgba(250, 204, 21, 0.4)',
   errorRed: '#EF4444',
 } as const;
@@ -75,13 +76,13 @@ const Background: React.FC = () => {
 
 const HeaderTitles: React.FC = () => {
   const frame = useCurrentFrame();
-
+  
   const slideDown = interpolate(frame, [0, 15], [-150, 0], {
     easing: EASINGS.overshoot,
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-
+  
   const opacity = interpolate(frame, [0, 10], [0, 1], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
@@ -99,13 +100,13 @@ const HeaderTitles: React.FC = () => {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
-
+  
   const currentShakeX = frame > 45 && frame < 55 ? shakeX : 0;
 
   return (
     <div style={{
       position: 'absolute',
-      top: 200,
+      top: 200, 
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -116,7 +117,7 @@ const HeaderTitles: React.FC = () => {
     }}>
       <div style={{
         color: COLORS.textWhite,
-        fontSize: 40,
+        fontSize: 40, 
         fontWeight: 800,
         letterSpacing: '4px',
         textTransform: 'uppercase',
@@ -130,10 +131,10 @@ const HeaderTitles: React.FC = () => {
       }}>
         ДЕНЬ СУРКА: AI ВЕРСИЯ
       </div>
-
+      
       <div style={{
         color: COLORS.accentYellow,
-        fontSize: 90,
+        fontSize: 90, 
         fontWeight: 900,
         textTransform: 'uppercase',
         lineHeight: 1.1,
@@ -156,7 +157,7 @@ const TaskCards: React.FC = () => {
   return (
     <div style={{
       position: 'absolute',
-      top: 750,
+      top: 750, 
       left: '50%',
       marginLeft: -450,
       width: 900,
@@ -166,15 +167,15 @@ const TaskCards: React.FC = () => {
       zIndex: 3,
     }}>
       {TASKS.map((task, index) => {
-        const startFrame = 30 + index * 20;
+        const startFrame = 30 + index * 20; 
         const endFrame = startFrame + 25;
-
+        
         const slideX = interpolate(frame, [startFrame, endFrame], [200, 0], {
           easing: EASINGS.overshoot,
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         });
-
+        
         const opacity = interpolate(frame, [startFrame, startFrame + 15], [0, 1], {
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
@@ -211,7 +212,7 @@ const TaskCards: React.FC = () => {
             }}>
               {task.icon}
             </div>
-
+            
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{
                 color: COLORS.textWhite,
