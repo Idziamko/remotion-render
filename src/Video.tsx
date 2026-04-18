@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   useCurrentFrame,
-  useVideoConfig,
   interpolate,
   Easing,
   AbsoluteFill,
@@ -11,7 +10,7 @@ import {
 // COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'GroundhogDayAi',
+  id: 'AiCheatCodeGems',
   durationInSeconds: 5,
   fps: 30,
   width: 1080,
@@ -32,18 +31,17 @@ const COLORS = {
   glassBorder: 'rgba(250, 204, 21, 0.5)', 
   neonGlow: 'rgba(250, 204, 21, 0.4)',
   errorRed: '#EF4444',
+  successGreen: '#22C55E',
 } as const;
 
 const EASINGS = {
   overshoot: Easing.bezier(0.34, 1.56, 0.64, 1),
-  easeOut: Easing.bezier(0.33, 1, 0.68, 1),
-  bounce: Easing.bezier(0.68, -0.55, 0.265, 1.55),
 };
 
-const TASKS = [
-  { icon: '📝', title: 'Для структуры постов', sub: 'Ctrl+C -> Ctrl+V -> Молиться' },
-  { icon: '💬', title: 'Для ответов клиентам', sub: '"Действуй как вежливый менеджер..."' },
-  { icon: '🎨', title: 'Для генерации картинок', sub: '"Добавь больше неона, я сказал!"' },
+const CHECKLIST = [
+  { icon: '⚙️', text: 'НАСТРОИЛ 1 РАЗ' },
+  { icon: '💾', text: 'СОХРАНИЛ В GEMS' },
+  { icon: '🍹', text: 'ВООБЩЕ ЗАБЫЛ' },
 ];
 
 // =============================================================================
@@ -52,7 +50,7 @@ const TASKS = [
 
 const Background: React.FC = () => {
   const frame = useCurrentFrame();
-  const panY = (frame * 3) % 100;
+  const panY = (frame * 4) % 100;
 
   return (
     <AbsoluteFill
@@ -74,7 +72,7 @@ const Background: React.FC = () => {
   );
 };
 
-const HeaderTitles: React.FC = () => {
+const FunnyHeader: React.FC = () => {
   const frame = useCurrentFrame();
   
   const slideDown = interpolate(frame, [0, 15], [-150, 0], {
@@ -88,25 +86,10 @@ const HeaderTitles: React.FC = () => {
     extrapolateRight: 'clamp',
   });
 
-  const counter = Math.floor(
-    interpolate(frame, [15, 45], [1, 23], {
-      easing: EASINGS.easeOut,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    })
-  );
-
-  const shakeX = interpolate(frame, [45, 47, 49, 51, 53], [0, -10, 10, -10, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  
-  const currentShakeX = frame > 45 && frame < 55 ? shakeX : 0;
-
   return (
     <div style={{
       position: 'absolute',
-      top: 200, 
+      top: 150, 
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -117,7 +100,7 @@ const HeaderTitles: React.FC = () => {
     }}>
       <div style={{
         color: COLORS.textWhite,
-        fontSize: 40, 
+        fontSize: 36, 
         fontWeight: 800,
         letterSpacing: '4px',
         textTransform: 'uppercase',
@@ -126,15 +109,16 @@ const HeaderTitles: React.FC = () => {
         background: COLORS.errorRed,
         padding: '10px 30px',
         borderRadius: '20px',
-        transform: 'rotate(-3deg)',
-        marginBottom: '30px',
+        transform: 'rotate(-2deg)',
+        marginBottom: '20px',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.5)',
       }}>
-        ДЕНЬ СУРКА: AI ВЕРСИЯ
+        ЛЕГАЛЬНЫЙ ЧИТ-КОД
       </div>
       
       <div style={{
         color: COLORS.accentYellow,
-        fontSize: 90, 
+        fontSize: 85, 
         fontWeight: 900,
         textTransform: 'uppercase',
         lineHeight: 1.1,
@@ -142,47 +126,51 @@ const HeaderTitles: React.FC = () => {
         textShadow: '0 10px 40px ' + COLORS.neonGlow,
         margin: 0,
         textAlign: 'center',
-        transform: 'translateX(' + currentShakeX + 'px)',
       }}>
-        ПЕРЕПИСАЛ ПРОМПТ<br />
-        {counter} РАЗА
+        СИСТЕМА ПРОТИВ<br />РУТИНЫ
       </div>
     </div>
   );
 };
 
-const TaskCards: React.FC = () => {
+const Checklist: React.FC = () => {
   const frame = useCurrentFrame();
 
   return (
     <div style={{
       position: 'absolute',
-      top: 750, 
+      top: 550, 
       left: '50%',
       marginLeft: -450,
       width: 900,
       display: 'flex',
       flexDirection: 'column',
-      gap: '40px',
+      gap: '35px',
       zIndex: 3,
     }}>
-      {TASKS.map((task, index) => {
-        const startFrame = 30 + index * 20; 
-        const endFrame = startFrame + 25;
+      {CHECKLIST.map((item, index) => {
+        // Стартуем карточки с 15-го кадра, так как летящих слов больше нет
+        const startFrame = 15 + index * 20; 
         
-        const slideX = interpolate(frame, [startFrame, endFrame], [200, 0], {
+        const relFrame = frame - startFrame;
+        // Возвращаем старую добрую логику, которая у тебя работала!
+        if (relFrame < 0) return null;
+
+        // Card Slide In
+        const slideX = interpolate(relFrame, [0, 15], [300, 0], {
           easing: EASINGS.overshoot,
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         });
         
-        const opacity = interpolate(frame, [startFrame, startFrame + 15], [0, 1], {
+        const opacity = interpolate(relFrame, [0, 10], [0, 1], {
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         });
 
-        const scale = interpolate(frame, [startFrame, endFrame], [0.8, 1], {
-          easing: EASINGS.bounce,
+        // Checkbox "Pop" animation
+        const checkScale = interpolate(relFrame, [10, 20], [0, 1], {
+          easing: EASINGS.overshoot,
           extrapolateLeft: 'clamp',
           extrapolateRight: 'clamp',
         });
@@ -197,41 +185,54 @@ const TaskCards: React.FC = () => {
               borderRadius: 30,
               border: '3px solid ' + COLORS.glassBorder,
               boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px ' + COLORS.neonGlow,
-              padding: '40px 50px',
+              padding: '30px 40px',
               display: 'flex',
               alignItems: 'center',
-              gap: '40px',
+              justifyContent: 'space-between',
               opacity: opacity,
-              transform: 'translateX(' + slideX + 'px) scale(' + scale + ')',
+              transform: 'translateX(' + slideX + 'px)',
             }}
           >
-            <div style={{
-              fontSize: 80,
-              lineHeight: 1,
-              filter: 'drop-shadow(0 0 20px ' + COLORS.accentYellow + ')',
-            }}>
-              {task.icon}
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Left Side: Icon & Text */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+              <div style={{
+                fontSize: 65,
+                lineHeight: 1,
+                filter: 'drop-shadow(0 0 15px ' + COLORS.accentYellow + ')',
+              }}>
+                {item.icon}
+              </div>
               <div style={{
                 color: COLORS.textWhite,
-                fontSize: 46,
-                fontWeight: 700,
+                fontSize: 48,
+                fontWeight: 800,
                 letterSpacing: '1px',
                 margin: 0,
+                textTransform: 'uppercase',
               }}>
-                {task.title}
+                {item.text}
               </div>
-              <div style={{
-                color: COLORS.textGray,
-                fontSize: 32,
-                fontWeight: 500,
-                fontFamily: 'monospace',
-                margin: 0,
-              }}>
-                {task.sub}
-              </div>
+            </div>
+
+            {/* Right Side: Animated Checkbox */}
+            <div style={{
+              width: 80,
+              height: 80,
+              border: '4px solid ' + COLORS.glassBorder,
+              borderRadius: 20,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)',
+            }}>
+               <div style={{
+                 fontSize: 60,
+                 transform: 'scale(' + checkScale + ')',
+                 filter: 'drop-shadow(0 0 15px ' + COLORS.successGreen + ')',
+               }}>
+                 ✅
+               </div>
             </div>
           </div>
         );
@@ -243,14 +244,14 @@ const TaskCards: React.FC = () => {
 // =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const GroundhogDayAi: React.FC = () => {
+const AiCheatCodeGems: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <Background />
-      <HeaderTitles />
-      <TaskCards />
+      <FunnyHeader />
+      <Checklist />
     </AbsoluteFill>
   );
 };
 
-export default GroundhogDayAi;
+export default AiCheatCodeGems;
