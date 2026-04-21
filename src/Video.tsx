@@ -18,17 +18,22 @@ export const compositionConfig = {
 };
 
 // =============================================================================
-// STYLES & THEME
+// STYLES & THEME (Based on Brand Palette)
 // =============================================================================
 const COLORS = {
-  bgCenter: '#1A0B2E', 
-  bgEdge: '#05020A',   
-  grid: 'rgba(255, 255, 255, 0.03)',
-  accentMagenta: '#EC4899', 
-  accentCyan: '#06B6D4',
-  accentYellow: '#FACC15',
+  // Darkened version of Knowledge Blue (#3B44B5) for the background
+  bgCenter: '#1F2466', 
+  bgEdge: '#0B0C24',   
+  grid: 'rgba(255, 255, 255, 0.04)',
+  
+  // Brand Palette Accents
+  accentYellow: '#F4CF80', // Joy Yellow
+  accentOrange: '#F4AB63', // Light Orange
+  accentGreen: '#B7DB6E',  // Youth Green
+  accentPink: '#E070A2',   // Pink
+  
   textWhite: '#FFFFFF',
-  textGray: '#94A3B8',
+  textMuted: '#9EA6EB',    // Soft tinted blue for unaccented words
 } as const;
 
 const EASINGS = {
@@ -39,31 +44,31 @@ const EASINGS = {
 };
 
 // =============================================================================
-// KINETIC DATA
+// KINETIC DATA (with explicitly safe RGBA shadows)
 // =============================================================================
 const WORDS = [
   // Scene 1: "Do you ever feel" (Frames 0-30)
-  { t: "Do", f: 0, dur: 30, s: 80, c: COLORS.textGray, x: -160, y: -120, rot: -4, anim: 'pop' },
-  { t: "you", f: 5, dur: 25, s: 80, c: COLORS.textWhite, x: 120, y: -90, rot: 4, anim: 'pop' },
-  { t: "ever", f: 10, dur: 20, s: 130, c: COLORS.accentMagenta, x: 0, y: -10, rot: 0, anim: 'scaleUp' },
-  { t: "feel", f: 15, dur: 15, s: 110, c: COLORS.textWhite, x: 0, y: 100, rot: 2, anim: 'slideUp' },
+  { t: "Do", f: 0, dur: 30, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -160, y: -120, rot: -4, anim: 'pop' },
+  { t: "you", f: 5, dur: 25, s: 80, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 120, y: -90, rot: 4, anim: 'pop' },
+  { t: "ever", f: 10, dur: 20, s: 130, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: -10, rot: 0, anim: 'scaleUp' },
+  { t: "feel", f: 15, dur: 15, s: 110, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: 100, rot: 2, anim: 'slideUp' },
 
   // Scene 2: "like you're" (Frames 30-43)
-  { t: "like", f: 30, dur: 13, s: 90, c: COLORS.textGray, x: -120, y: -20, rot: -6, anim: 'slideRight' },
-  { t: "you're", f: 35, dur: 8, s: 100, c: COLORS.textWhite, x: 100, y: 20, rot: 6, anim: 'slideLeft' },
+  { t: "like", f: 30, dur: 13, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -20, rot: -6, anim: 'slideRight' },
+  { t: "you're", f: 35, dur: 8, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 100, y: 20, rot: 6, anim: 'slideLeft' },
 
   // Scene 3: "WORKING HARDER" (Frames 43-70)
-  { t: "WORKING", f: 43, dur: 27, s: 150, c: COLORS.accentCyan, x: 0, y: -50, rot: -3, anim: 'slam' },
-  { t: "HARDER", f: 53, dur: 17, s: 190, c: COLORS.accentYellow, x: 0, y: 40, rot: 4, anim: 'slam' },
+  { t: "WORKING", f: 43, dur: 27, s: 150, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: -50, rot: -3, anim: 'slam' },
+  { t: "HARDER", f: 53, dur: 17, s: 190, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: 0, y: 40, rot: 4, anim: 'slam' },
 
   // Scene 4: "than your students" (Frames 70-104)
-  { t: "than", f: 70, dur: 34, s: 70, c: COLORS.textGray, x: -150, y: -130, rot: -5, anim: 'pop' },
-  { t: "your", f: 76, dur: 28, s: 70, c: COLORS.textWhite, x: 0, y: -110, rot: 0, anim: 'pop' },
-  { t: "STUDENTS", f: 82, dur: 22, s: 160, c: COLORS.accentMagenta, x: 0, y: 10, rot: -2, anim: 'overshoot' },
+  { t: "than", f: 70, dur: 34, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -150, y: -130, rot: -5, anim: 'pop' },
+  { t: "your", f: 76, dur: 28, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: -110, rot: 0, anim: 'pop' },
+  { t: "STUDENTS", f: 82, dur: 22, s: 160, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 10, rot: -2, anim: 'overshoot' },
 
   // Scene 5: "in class?" (Frames 104-150)
-  { t: "in", f: 104, dur: 46, s: 80, c: COLORS.textGray, x: 0, y: -120, rot: 0, anim: 'slideDown' },
-  { t: "CLASS?", f: 110, dur: 40, s: 180, c: COLORS.accentCyan, x: 0, y: 20, rot: 0, anim: 'pop' },
+  { t: "in", f: 104, dur: 46, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -120, rot: 0, anim: 'slideDown' },
+  { t: "CLASS?", f: 110, dur: 40, s: 180, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: 0, y: 20, rot: 0, anim: 'pop' },
 ];
 
 // =============================================================================
@@ -98,7 +103,7 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
   const frame = useCurrentFrame();
   const relFrame = frame - word.f;
   
-  // Opacity handling (mathematically safe without conditional rendering)
+  // Opacity handling
   const opacityIn = interpolate(relFrame, [0, 5], [0, 1], { 
     easing: EASINGS.easeOut, 
     extrapolateLeft: 'clamp', 
@@ -143,10 +148,6 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
   const finalY = curY + interpolate(exitProgress, [0, 1], [0, 40]);
   const exitBlur = interpolate(exitProgress, [0, 1], [0, 15]);
 
-  const shadowColor = word.c === COLORS.textWhite || word.c === COLORS.textGray 
-    ? 'rgba(255,255,255,0.1)' 
-    : word.c + '50';
-
   return (
     <div style={{
       position: 'absolute',
@@ -159,7 +160,7 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
       fontWeight: 900,
       letterSpacing: '-2px',
       textTransform: 'uppercase',
-      filter: 'blur(' + (enterBlur + exitBlur) + 'px) drop-shadow(0 10px 40px ' + shadowColor + ')',
+      filter: 'blur(' + (enterBlur + exitBlur) + 'px) drop-shadow(0 10px 30px ' + word.glow + ')',
       whiteSpace: 'nowrap',
       margin: 0,
       lineHeight: 1,
@@ -203,7 +204,7 @@ const MainScene: React.FC = () => {
 // =============================================================================
 const KineticAudioSync: React.FC = () => {
   return (
-    <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Aptos, Open Sans, system-ui, sans-serif' }}>
       <Background />
       <MainScene />
     </AbsoluteFill>
