@@ -10,7 +10,7 @@ import {
 // COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'KineticSecret',
+  id: 'KineticCta',
   durationInSeconds: 5,
   fps: 30,
   width: 1080,
@@ -44,22 +44,24 @@ const EASINGS = {
 // =============================================================================
 // KINETIC DATA (Safe RGBA shadows)
 // =============================================================================
-// Audio: "The secret is to stop teaching and start guiding."
+// Audio: "Master the CELTA standard at International House Kyiv. Book a consultation today."
 const WORDS = [
-  // Scene 1: "The secret is" (Frames 0-30)
-  { t: "The", f: 0, dur: 28, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -140, y: -100, rot: -5, anim: 'pop' },
-  { t: "SECRET", f: 5, dur: 23, s: 150, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: -10, rot: 2, anim: 'scaleUp' },
-  { t: "is", f: 12, dur: 16, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 120, y: 80, rot: 5, anim: 'slideUp' },
+  // Scene 1: "Master the CELTA standard" (Frames 0-55)
+  { t: "Master", f: 0, dur: 25, s: 100, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: -100, y: -80, rot: -3, anim: 'pop' },
+  { t: "the", f: 8, dur: 17, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 120, y: -100, rot: 4, anim: 'slideRight' },
+  { t: "CELTA", f: 15, dur: 35, s: 180, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: 0, rot: 2, anim: 'slam' },
+  { t: "standard", f: 25, dur: 25, s: 80, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 40, y: 90, rot: -2, anim: 'slideUp' },
 
-  // Scene 2: "to stop TEACHING" (Frames 30-65)
-  { t: "to", f: 30, dur: 25, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -140, y: -60, rot: -3, anim: 'slideRight' },
-  { t: "stop", f: 35, dur: 20, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: -40, y: -30, rot: -2, anim: 'pop' },
-  { t: "TEACHING", f: 42, dur: 25, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 40, rot: 3, anim: 'slam' },
+  // Scene 2: "at International House Kyiv" (Frames 55-105)
+  { t: "at", f: 55, dur: 20, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -150, y: -90, rot: -5, anim: 'pop' },
+  { t: "INTERNATIONAL", f: 60, dur: 45, s: 90, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: -30, rot: 0, anim: 'slideLeft' },
+  { t: "HOUSE", f: 68, dur: 37, s: 90, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: 40, rot: 0, anim: 'slideRight' },
+  { t: "KYIV", f: 80, dur: 25, s: 160, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: 0, y: 130, rot: -3, anim: 'overshoot' },
 
-  // Scene 3: "and start GUIDING" (Frames 65-120)
-  { t: "and", f: 67, dur: 30, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -100, rot: -4, anim: 'pop' },
-  { t: "start", f: 72, dur: 25, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: -60, rot: 0, anim: 'slideDown' },
-  { t: "GUIDING", f: 80, dur: 45, s: 170, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 30, rot: -2, anim: 'overshoot' },
+  // Scene 3: "Book a consultation today" (Frames 105-150)
+  { t: "Book a", f: 105, dur: 45, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -90, rot: 0, anim: 'slideDown' },
+  { t: "CONSULTATION", f: 112, dur: 38, s: 115, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 0, rot: 2, anim: 'pop' },
+  { t: "TODAY", f: 122, dur: 28, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 100, rot: -4, anim: 'slam' },
 ];
 
 // =============================================================================
@@ -161,12 +163,14 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
 const MainScene: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Dynamic Camera Shakes on heavy words ("TEACHING" and "GUIDING")
+  // Dynamic Camera Shakes on heavy words ("CELTA", "KYIV", "TODAY")
   let shakeX = 0;
-  if (frame >= 42 && frame <= 48) {
-    shakeX = interpolate(frame, [42, 43, 45, 48], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 80 && frame <= 88) {
-    shakeX = interpolate(frame, [80, 82, 84, 86, 88], [0, -18, 18, -10, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  if (frame >= 15 && frame <= 21) {
+    shakeX = interpolate(frame, [15, 16, 18, 21], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (frame >= 80 && frame <= 86) {
+    shakeX = interpolate(frame, [80, 81, 83, 86], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (frame >= 122 && frame <= 128) {
+    shakeX = interpolate(frame, [122, 123, 125, 128], [0, -18, 18, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   }
 
   const cameraScale = interpolate(frame, [0, 150], [1, 1.08], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
@@ -188,7 +192,7 @@ const MainScene: React.FC = () => {
 // =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const KineticSecret: React.FC = () => {
+const KineticCta: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Aptos, Open Sans, system-ui, sans-serif' }}>
       <Background />
@@ -197,4 +201,4 @@ const KineticSecret: React.FC = () => {
   );
 };
 
-export default KineticSecret;
+export default KineticCta;
