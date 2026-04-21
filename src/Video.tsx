@@ -10,7 +10,7 @@ import {
 // COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'KineticAudioSync',
+  id: 'KineticSecret',
   durationInSeconds: 5,
   fps: 30,
   width: 1080,
@@ -18,22 +18,20 @@ export const compositionConfig = {
 };
 
 // =============================================================================
-// STYLES & THEME (Based on Brand Palette)
+// STYLES & THEME (Brand Palette)
 // =============================================================================
 const COLORS = {
-  // Darkened version of Knowledge Blue (#3B44B5) for the background
   bgCenter: '#1F2466', 
   bgEdge: '#0B0C24',   
   grid: 'rgba(255, 255, 255, 0.04)',
   
-  // Brand Palette Accents
-  accentYellow: '#F4CF80', // Joy Yellow
-  accentOrange: '#F4AB63', // Light Orange
-  accentGreen: '#B7DB6E',  // Youth Green
-  accentPink: '#E070A2',   // Pink
+  accentYellow: '#F4CF80', 
+  accentOrange: '#F4AB63', 
+  accentGreen: '#B7DB6E',  
+  accentPink: '#E070A2',   
   
   textWhite: '#FFFFFF',
-  textMuted: '#9EA6EB',    // Soft tinted blue for unaccented words
+  textMuted: '#9EA6EB',    
 } as const;
 
 const EASINGS = {
@@ -44,31 +42,24 @@ const EASINGS = {
 };
 
 // =============================================================================
-// KINETIC DATA (with explicitly safe RGBA shadows)
+// KINETIC DATA (Safe RGBA shadows)
 // =============================================================================
+// Audio: "The secret is to stop teaching and start guiding."
 const WORDS = [
-  // Scene 1: "Do you ever feel" (Frames 0-30)
-  { t: "Do", f: 0, dur: 30, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -160, y: -120, rot: -4, anim: 'pop' },
-  { t: "you", f: 5, dur: 25, s: 80, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 120, y: -90, rot: 4, anim: 'pop' },
-  { t: "ever", f: 10, dur: 20, s: 130, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: -10, rot: 0, anim: 'scaleUp' },
-  { t: "feel", f: 15, dur: 15, s: 110, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: 100, rot: 2, anim: 'slideUp' },
+  // Scene 1: "The secret is" (Frames 0-30)
+  { t: "The", f: 0, dur: 28, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -140, y: -100, rot: -5, anim: 'pop' },
+  { t: "SECRET", f: 5, dur: 23, s: 150, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: -10, rot: 2, anim: 'scaleUp' },
+  { t: "is", f: 12, dur: 16, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 120, y: 80, rot: 5, anim: 'slideUp' },
 
-  // Scene 2: "like you're" (Frames 30-43)
-  { t: "like", f: 30, dur: 13, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -20, rot: -6, anim: 'slideRight' },
-  { t: "you're", f: 35, dur: 8, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 100, y: 20, rot: 6, anim: 'slideLeft' },
+  // Scene 2: "to stop TEACHING" (Frames 30-65)
+  { t: "to", f: 30, dur: 25, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -140, y: -60, rot: -3, anim: 'slideRight' },
+  { t: "stop", f: 35, dur: 20, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: -40, y: -30, rot: -2, anim: 'pop' },
+  { t: "TEACHING", f: 42, dur: 25, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 40, rot: 3, anim: 'slam' },
 
-  // Scene 3: "WORKING HARDER" (Frames 43-70)
-  { t: "WORKING", f: 43, dur: 27, s: 150, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: -50, rot: -3, anim: 'slam' },
-  { t: "HARDER", f: 53, dur: 17, s: 190, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: 0, y: 40, rot: 4, anim: 'slam' },
-
-  // Scene 4: "than your students" (Frames 70-104)
-  { t: "than", f: 70, dur: 34, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -150, y: -130, rot: -5, anim: 'pop' },
-  { t: "your", f: 76, dur: 28, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: -110, rot: 0, anim: 'pop' },
-  { t: "STUDENTS", f: 82, dur: 22, s: 160, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 10, rot: -2, anim: 'overshoot' },
-
-  // Scene 5: "in class?" (Frames 104-150)
-  { t: "in", f: 104, dur: 46, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -120, rot: 0, anim: 'slideDown' },
-  { t: "CLASS?", f: 110, dur: 40, s: 180, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: 0, y: 20, rot: 0, anim: 'pop' },
+  // Scene 3: "and start GUIDING" (Frames 65-120)
+  { t: "and", f: 67, dur: 30, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -100, rot: -4, anim: 'pop' },
+  { t: "start", f: 72, dur: 25, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: -60, rot: 0, anim: 'slideDown' },
+  { t: "GUIDING", f: 80, dur: 45, s: 170, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 30, rot: -2, anim: 'overshoot' },
 ];
 
 // =============================================================================
@@ -103,7 +94,6 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
   const frame = useCurrentFrame();
   const relFrame = frame - word.f;
   
-  // Opacity handling
   const opacityIn = interpolate(relFrame, [0, 5], [0, 1], { 
     easing: EASINGS.easeOut, 
     extrapolateLeft: 'clamp', 
@@ -116,7 +106,6 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
   });
   const currentOpacity = Math.min(opacityIn, opacityOut);
 
-  // Entrance animations
   let baseScale = 1;
   let curX = word.x;
   let curY = word.y;
@@ -139,10 +128,8 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
     curY += interpolate(relFrame, [0, 8], [-60, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   }
 
-  // Blurs
   const enterBlur = interpolate(relFrame, [0, 6], [15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   
-  // Exit animations
   const exitProgress = interpolate(relFrame, [word.dur - 5, word.dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   const finalScale = baseScale * interpolate(exitProgress, [0, 1], [1, 0.8]);
   const finalY = curY + interpolate(exitProgress, [0, 1], [0, 40]);
@@ -174,15 +161,14 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
 const MainScene: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Dynamic Camera Shakes on heavy words
+  // Dynamic Camera Shakes on heavy words ("TEACHING" and "GUIDING")
   let shakeX = 0;
-  if (frame >= 43 && frame <= 48) {
-    shakeX = interpolate(frame, [43, 44, 46, 48], [0, -8, 8, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 53 && frame <= 60) {
-    shakeX = interpolate(frame, [53, 54, 56, 58, 60], [0, -20, 20, -10, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  if (frame >= 42 && frame <= 48) {
+    shakeX = interpolate(frame, [42, 43, 45, 48], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (frame >= 80 && frame <= 88) {
+    shakeX = interpolate(frame, [80, 82, 84, 86, 88], [0, -18, 18, -10, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   }
 
-  // Slow continuous zoom
   const cameraScale = interpolate(frame, [0, 150], [1, 1.08], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
@@ -202,7 +188,7 @@ const MainScene: React.FC = () => {
 // =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const KineticAudioSync: React.FC = () => {
+const KineticSecret: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Aptos, Open Sans, system-ui, sans-serif' }}>
       <Background />
@@ -211,4 +197,4 @@ const KineticAudioSync: React.FC = () => {
   );
 };
 
-export default KineticAudioSync;
+export default KineticSecret;
