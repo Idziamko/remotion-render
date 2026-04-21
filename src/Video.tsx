@@ -10,7 +10,7 @@ import {
 // COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'AiCheatCodeGems',
+  id: 'KineticAudioSync',
   durationInSeconds: 5,
   fps: 30,
   width: 1080,
@@ -21,27 +21,49 @@ export const compositionConfig = {
 // STYLES & THEME
 // =============================================================================
 const COLORS = {
-  bgCenter: '#1E3A8A', 
-  bgEdge: '#020617',   
-  grid: 'rgba(255, 255, 255, 0.06)',
-  accentYellow: '#FACC15', 
+  bgCenter: '#1A0B2E', 
+  bgEdge: '#05020A',   
+  grid: 'rgba(255, 255, 255, 0.03)',
+  accentMagenta: '#EC4899', 
+  accentCyan: '#06B6D4',
+  accentYellow: '#FACC15',
   textWhite: '#FFFFFF',
   textGray: '#94A3B8',
-  glassBg: 'rgba(15, 23, 42, 0.65)',
-  glassBorder: 'rgba(250, 204, 21, 0.5)', 
-  neonGlow: 'rgba(250, 204, 21, 0.4)',
-  errorRed: '#EF4444',
-  successGreen: '#22C55E',
 } as const;
 
 const EASINGS = {
+  easeOut: Easing.bezier(0.33, 1, 0.68, 1),
+  easeIn: Easing.bezier(0.32, 0, 0.67, 0),
   overshoot: Easing.bezier(0.34, 1.56, 0.64, 1),
+  slam: Easing.bezier(0.1, 1, 0.3, 1),
 };
 
-const CHECKLIST = [
-  { icon: '⚙️', text: 'НАСТРОИЛ 1 РАЗ' },
-  { icon: '💾', text: 'СОХРАНИЛ В GEMS' },
-  { icon: '🍹', text: 'ВООБЩЕ ЗАБЫЛ' },
+// =============================================================================
+// KINETIC DATA
+// =============================================================================
+const WORDS = [
+  // Scene 1: "Do you ever feel" (Frames 0-30)
+  { t: "Do", f: 0, dur: 30, s: 80, c: COLORS.textGray, x: -160, y: -120, rot: -4, anim: 'pop' },
+  { t: "you", f: 5, dur: 25, s: 80, c: COLORS.textWhite, x: 120, y: -90, rot: 4, anim: 'pop' },
+  { t: "ever", f: 10, dur: 20, s: 130, c: COLORS.accentMagenta, x: 0, y: -10, rot: 0, anim: 'scaleUp' },
+  { t: "feel", f: 15, dur: 15, s: 110, c: COLORS.textWhite, x: 0, y: 100, rot: 2, anim: 'slideUp' },
+
+  // Scene 2: "like you're" (Frames 30-43)
+  { t: "like", f: 30, dur: 13, s: 90, c: COLORS.textGray, x: -120, y: -20, rot: -6, anim: 'slideRight' },
+  { t: "you're", f: 35, dur: 8, s: 100, c: COLORS.textWhite, x: 100, y: 20, rot: 6, anim: 'slideLeft' },
+
+  // Scene 3: "WORKING HARDER" (Frames 43-70)
+  { t: "WORKING", f: 43, dur: 27, s: 150, c: COLORS.accentCyan, x: 0, y: -50, rot: -3, anim: 'slam' },
+  { t: "HARDER", f: 53, dur: 17, s: 190, c: COLORS.accentYellow, x: 0, y: 40, rot: 4, anim: 'slam' },
+
+  // Scene 4: "than your students" (Frames 70-104)
+  { t: "than", f: 70, dur: 34, s: 70, c: COLORS.textGray, x: -150, y: -130, rot: -5, anim: 'pop' },
+  { t: "your", f: 76, dur: 28, s: 70, c: COLORS.textWhite, x: 0, y: -110, rot: 0, anim: 'pop' },
+  { t: "STUDENTS", f: 82, dur: 22, s: 160, c: COLORS.accentMagenta, x: 0, y: 10, rot: -2, anim: 'overshoot' },
+
+  // Scene 5: "in class?" (Frames 104-150)
+  { t: "in", f: 104, dur: 46, s: 80, c: COLORS.textGray, x: 0, y: -120, rot: 0, anim: 'slideDown' },
+  { t: "CLASS?", f: 110, dur: 40, s: 180, c: COLORS.accentCyan, x: 0, y: 20, rot: 0, anim: 'pop' },
 ];
 
 // =============================================================================
@@ -50,12 +72,12 @@ const CHECKLIST = [
 
 const Background: React.FC = () => {
   const frame = useCurrentFrame();
-  const panY = (frame * 4) % 100;
+  const panY = (frame * 2) % 120;
 
   return (
     <AbsoluteFill
       style={{
-        background: 'radial-gradient(circle at 50% 30%, ' + COLORS.bgCenter + ' 0%, ' + COLORS.bgEdge + ' 100%)',
+        background: 'radial-gradient(circle at 50% 50%, ' + COLORS.bgCenter + ' 0%, ' + COLORS.bgEdge + ' 100%)',
         zIndex: 1,
       }}
     >
@@ -72,171 +94,106 @@ const Background: React.FC = () => {
   );
 };
 
-const FunnyHeader: React.FC = () => {
+const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
   const frame = useCurrentFrame();
+  const relFrame = frame - word.f;
   
-  const slideDown = interpolate(frame, [0, 15], [-150, 0], {
-    easing: EASINGS.overshoot,
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
+  // Opacity handling (mathematically safe without conditional rendering)
+  const opacityIn = interpolate(relFrame, [0, 5], [0, 1], { 
+    easing: EASINGS.easeOut, 
+    extrapolateLeft: 'clamp', 
+    extrapolateRight: 'clamp' 
   });
+  const opacityOut = interpolate(relFrame, [word.dur - 5, word.dur], [1, 0], { 
+    easing: EASINGS.easeIn, 
+    extrapolateLeft: 'clamp', 
+    extrapolateRight: 'clamp' 
+  });
+  const currentOpacity = Math.min(opacityIn, opacityOut);
+
+  // Entrance animations
+  let baseScale = 1;
+  let curX = word.x;
+  let curY = word.y;
   
-  const opacity = interpolate(frame, [0, 10], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  if (word.anim === 'pop') {
+    baseScale = interpolate(relFrame, [0, 8], [0.4, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'scaleUp') {
+    baseScale = interpolate(relFrame, [0, word.dur], [0.8, 1.1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideUp') {
+    curY += interpolate(relFrame, [0, 8], [60, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideRight') {
+    curX += interpolate(relFrame, [0, 8], [-80, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideLeft') {
+    curX += interpolate(relFrame, [0, 8], [80, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slam') {
+    baseScale = interpolate(relFrame, [0, 6], [3, 1], { easing: EASINGS.slam, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'overshoot') {
+    baseScale = interpolate(relFrame, [0, 12], [0, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideDown') {
+    curY += interpolate(relFrame, [0, 8], [-60, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  }
+
+  // Blurs
+  const enterBlur = interpolate(relFrame, [0, 6], [15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  
+  // Exit animations
+  const exitProgress = interpolate(relFrame, [word.dur - 5, word.dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const finalScale = baseScale * interpolate(exitProgress, [0, 1], [1, 0.8]);
+  const finalY = curY + interpolate(exitProgress, [0, 1], [0, 40]);
+  const exitBlur = interpolate(exitProgress, [0, 1], [0, 15]);
+
+  const shadowColor = word.c === COLORS.textWhite || word.c === COLORS.textGray 
+    ? 'rgba(255,255,255,0.1)' 
+    : word.c + '50';
 
   return (
     <div style={{
       position: 'absolute',
-      top: 150, 
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      zIndex: 2,
-      opacity: opacity,
-      transform: 'translateY(' + slideDown + 'px)',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%) translate(' + curX + 'px, ' + finalY + 'px) rotate(' + word.rot + 'deg) scale(' + finalScale + ')',
+      opacity: currentOpacity,
+      color: word.c,
+      fontSize: word.s,
+      fontWeight: 900,
+      letterSpacing: '-2px',
+      textTransform: 'uppercase',
+      filter: 'blur(' + (enterBlur + exitBlur) + 'px) drop-shadow(0 10px 40px ' + shadowColor + ')',
+      whiteSpace: 'nowrap',
+      margin: 0,
+      lineHeight: 1,
+      zIndex: 3,
     }}>
-      <div style={{
-        color: COLORS.textWhite,
-        fontSize: 36, 
-        fontWeight: 800,
-        letterSpacing: '4px',
-        textTransform: 'uppercase',
-        opacity: 0.9,
-        margin: 0,
-        background: COLORS.errorRed,
-        padding: '10px 30px',
-        borderRadius: '20px',
-        transform: 'rotate(-2deg)',
-        marginBottom: '20px',
-        boxShadow: '0 10px 20px rgba(0,0,0,0.5)',
-      }}>
-        ЛЕГАЛЬНЫЙ ЧИТ-КОД
-      </div>
-      
-      <div style={{
-        color: COLORS.accentYellow,
-        fontSize: 85, 
-        fontWeight: 900,
-        textTransform: 'uppercase',
-        lineHeight: 1.1,
-        letterSpacing: '2px',
-        textShadow: '0 10px 40px ' + COLORS.neonGlow,
-        margin: 0,
-        textAlign: 'center',
-      }}>
-        СИСТЕМА ПРОТИВ<br />РУТИНЫ
-      </div>
+      {word.t}
     </div>
   );
 };
 
-const Checklist: React.FC = () => {
+const MainScene: React.FC = () => {
   const frame = useCurrentFrame();
+
+  // Dynamic Camera Shakes on heavy words
+  let shakeX = 0;
+  if (frame >= 43 && frame <= 48) {
+    shakeX = interpolate(frame, [43, 44, 46, 48], [0, -8, 8, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (frame >= 53 && frame <= 60) {
+    shakeX = interpolate(frame, [53, 54, 56, 58, 60], [0, -20, 20, -10, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  }
+
+  // Slow continuous zoom
+  const cameraScale = interpolate(frame, [0, 150], [1, 1.08], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
     <div style={{
       position: 'absolute',
-      top: 550, 
-      left: '50%',
-      marginLeft: -450,
-      width: 900,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '35px',
-      zIndex: 3,
+      inset: 0,
+      transform: 'scale(' + cameraScale + ') translateX(' + shakeX + 'px)',
+      zIndex: 2,
     }}>
-      {CHECKLIST.map((item, index) => {
-        // Стартуем карточки с 15-го кадра, так как летящих слов больше нет
-        const startFrame = 15 + index * 20; 
-        
-        const relFrame = frame - startFrame;
-        // Возвращаем старую добрую логику, которая у тебя работала!
-        if (relFrame < 0) return null;
-
-        // Card Slide In
-        const slideX = interpolate(relFrame, [0, 15], [300, 0], {
-          easing: EASINGS.overshoot,
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        });
-        
-        const opacity = interpolate(relFrame, [0, 10], [0, 1], {
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        });
-
-        // Checkbox "Pop" animation
-        const checkScale = interpolate(relFrame, [10, 20], [0, 1], {
-          easing: EASINGS.overshoot,
-          extrapolateLeft: 'clamp',
-          extrapolateRight: 'clamp',
-        });
-
-        return (
-          <div
-            key={index}
-            style={{
-              background: COLORS.glassBg,
-              backdropFilter: 'blur(25px)',
-              WebkitBackdropFilter: 'blur(25px)',
-              borderRadius: 30,
-              border: '3px solid ' + COLORS.glassBorder,
-              boxShadow: '0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px ' + COLORS.neonGlow,
-              padding: '30px 40px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              opacity: opacity,
-              transform: 'translateX(' + slideX + 'px)',
-            }}
-          >
-            {/* Left Side: Icon & Text */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
-              <div style={{
-                fontSize: 65,
-                lineHeight: 1,
-                filter: 'drop-shadow(0 0 15px ' + COLORS.accentYellow + ')',
-              }}>
-                {item.icon}
-              </div>
-              <div style={{
-                color: COLORS.textWhite,
-                fontSize: 48,
-                fontWeight: 800,
-                letterSpacing: '1px',
-                margin: 0,
-                textTransform: 'uppercase',
-              }}>
-                {item.text}
-              </div>
-            </div>
-
-            {/* Right Side: Animated Checkbox */}
-            <div style={{
-              width: 80,
-              height: 80,
-              border: '4px solid ' + COLORS.glassBorder,
-              borderRadius: 20,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'rgba(0,0,0,0.3)',
-              boxShadow: 'inset 0 0 10px rgba(0,0,0,0.5)',
-            }}>
-               <div style={{
-                 fontSize: 60,
-                 transform: 'scale(' + checkScale + ')',
-                 filter: 'drop-shadow(0 0 15px ' + COLORS.successGreen + ')',
-               }}>
-                 ✅
-               </div>
-            </div>
-          </div>
-        );
-      })}
+      {WORDS.map((word, i) => (
+        <KineticWord key={i} word={word} />
+      ))}
     </div>
   );
 };
@@ -244,14 +201,13 @@ const Checklist: React.FC = () => {
 // =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const AiCheatCodeGems: React.FC = () => {
+const KineticAudioSync: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <Background />
-      <FunnyHeader />
-      <Checklist />
+      <MainScene />
     </AbsoluteFill>
   );
 };
 
-export default AiCheatCodeGems;
+export default KineticAudioSync;
