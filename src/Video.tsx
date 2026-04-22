@@ -10,8 +10,8 @@ import {
 // COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'KineticHireTeachers',
-  durationInSeconds: 6, // Увеличил до 6 секунд, так как текста много
+  id: 'KineticHireTeachersPro',
+  durationInSeconds: 8, // Увеличили для точного соответствия аудио
   fps: 30,
   width: 1080,
   height: 1920,
@@ -42,31 +42,31 @@ const EASINGS = {
 };
 
 // =============================================================================
-// KINETIC DATA (Synced to the provided audio script)
+// KINETIC DATA (Strict Audio Sync)
 // =============================================================================
 const WORDS = [
-  // Scene 1: "We don't just TRAIN great teachers," (Frames 0-50)
+  // Scene 1: "We don't just TRAIN great teachers," (0.0s - 1.8s)
   { t: "We don't", f: 0, dur: 25, s: 75, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -110, y: -90, rot: -4, anim: 'pop' },
-  { t: "just", f: 8, dur: 20, s: 75, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 60, y: -100, rot: 3, anim: 'slideRight' },
-  { t: "TRAIN", f: 16, dur: 34, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: -20, y: -10, rot: -2, anim: 'slam' },
-  { t: "great teachers,", f: 28, dur: 25, s: 65, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 20, y: 70, rot: 0, anim: 'slideUp' },
+  { t: "just", f: 12, dur: 20, s: 75, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 60, y: -100, rot: 3, anim: 'slideRight' },
+  { t: "TRAIN", f: 20, dur: 30, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: -20, y: -10, rot: -2, anim: 'slam' },
+  { t: "great teachers,", f: 30, dur: 25, s: 65, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 20, y: 70, rot: 0, anim: 'slideUp' },
 
-  // Scene 2: "we HIRE them." (Frames 45-80)
-  { t: "we", f: 45, dur: 25, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -30, rot: -5, anim: 'pop' },
-  { t: "HIRE", f: 52, dur: 35, s: 180, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 30, rot: 3, anim: 'overshoot' },
-  { t: "them.", f: 62, dur: 25, s: 75, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 130, y: -20, rot: 5, anim: 'slideLeft' },
+  // Scene 2: "we HIRE them." (1.8s - 3.1s)
+  { t: "we", f: 55, dur: 25, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -30, rot: -5, anim: 'pop' },
+  { t: "HIRE", f: 65, dur: 35, s: 180, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 30, rot: 3, anim: 'overshoot' },
+  { t: "them.", f: 75, dur: 25, s: 75, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 130, y: -20, rot: 5, anim: 'slideLeft' },
 
-  // Scene 3: "Get your CELTA and join the IH KYIV team." (Frames 80-135)
-  { t: "Get your", f: 80, dur: 28, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -100, y: -100, rot: -3, anim: 'slideDown' },
-  { t: "CELTA", f: 88, dur: 35, s: 160, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: -30, rot: -2, anim: 'slam' },
-  { t: "and join the", f: 98, dur: 25, s: 60, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: 40, rot: 0, anim: 'pop' },
-  { t: "IH KYIV", f: 110, dur: 30, s: 150, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: -30, y: 100, rot: 2, anim: 'overshoot' },
-  { t: "team.", f: 118, dur: 22, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 140, y: 30, rot: -5, anim: 'slideLeft' },
+  // Scene 3: "Get your CELTA and join the IH KYIV team." (3.1s - 5.8s)
+  { t: "Get your", f: 95, dur: 30, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -100, y: -100, rot: -3, anim: 'slideDown' },
+  { t: "CELTA", f: 110, dur: 35, s: 160, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: -30, rot: -2, anim: 'slam' },
+  { t: "and join the", f: 125, dur: 25, s: 60, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: 40, rot: 0, anim: 'pop' },
+  { t: "IH KYIV", f: 140, dur: 35, s: 150, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: -30, y: 100, rot: 2, anim: 'overshoot' },
+  { t: "team.", f: 155, dur: 25, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 140, y: 30, rot: -5, anim: 'slideLeft' },
 
-  // Scene 4: "Book a CONSULTATION TODAY." (Frames 135-180)
-  { t: "Book a", f: 135, dur: 25, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -100, rot: 0, anim: 'pop' },
-  { t: "CONSULTATION", f: 142, dur: 38, s: 110, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: -10, rot: 2, anim: 'slam' },
-  { t: "TODAY", f: 152, dur: 28, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 80, rot: -3, anim: 'overshoot' },
+  // Scene 4: "Book a CONSULTATION TODAY." (5.8s - 8.0s)
+  { t: "Book a", f: 175, dur: 30, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -100, rot: 0, anim: 'pop' },
+  { t: "CONSULTATION", f: 190, dur: 35, s: 110, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: -10, rot: 2, anim: 'slam' },
+  { t: "TODAY", f: 205, dur: 35, s: 160, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 80, rot: -3, anim: 'overshoot' },
 ];
 
 // =============================================================================
@@ -168,22 +168,24 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
 const MainScene: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Dynamic Camera Shakes synced with "TRAIN", "HIRE", "CELTA", "CONSULTATION", "TODAY"
+  // Жестко привязанные тайминги тряски камеры к появлению ударных слов
   let shakeX = 0;
-  if (frame >= 16 && frame <= 22) {
-    shakeX = interpolate(frame, [16, 17, 19, 22], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 52 && frame <= 58) {
-    shakeX = interpolate(frame, [52, 53, 55, 58], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 88 && frame <= 94) {
-    shakeX = interpolate(frame, [88, 89, 91, 94], [0, -18, 18, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 142 && frame <= 148) {
-    shakeX = interpolate(frame, [142, 143, 145, 148], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 152 && frame <= 158) {
-    shakeX = interpolate(frame, [152, 153, 155, 158], [0, -20, 20, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  if (frame >= 20 && frame <= 26) {
+    shakeX = interpolate(frame, [20, 21, 23, 26], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }); // TRAIN
+  } else if (frame >= 65 && frame <= 71) {
+    shakeX = interpolate(frame, [65, 66, 68, 71], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }); // HIRE
+  } else if (frame >= 110 && frame <= 116) {
+    shakeX = interpolate(frame, [110, 111, 113, 116], [0, -18, 18, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }); // CELTA
+  } else if (frame >= 140 && frame <= 146) {
+    shakeX = interpolate(frame, [140, 141, 143, 146], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }); // IH KYIV
+  } else if (frame >= 190 && frame <= 196) {
+    shakeX = interpolate(frame, [190, 191, 193, 196], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }); // CONSULTATION
+  } else if (frame >= 205 && frame <= 211) {
+    shakeX = interpolate(frame, [205, 206, 208, 211], [0, -20, 20, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }); // TODAY
   }
 
-  // Slower continuous zoom due to 6-second length
-  const cameraScale = interpolate(frame, [0, 180], [1, 1.1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  // Медленный зум на протяжении 8 секунд
+  const cameraScale = interpolate(frame, [0, 240], [1, 1.1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
   return (
     <div style={{
@@ -202,7 +204,7 @@ const MainScene: React.FC = () => {
 // =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const KineticHireTeachers: React.FC = () => {
+const KineticHireTeachersPro: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Aptos, Open Sans, system-ui, sans-serif' }}>
       <Background />
@@ -211,4 +213,4 @@ const KineticHireTeachers: React.FC = () => {
   );
 };
 
-export default KineticHireTeachers;
+export default KineticHireTeachersPro;
