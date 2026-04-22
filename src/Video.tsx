@@ -10,7 +10,7 @@ import {
 // COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'KineticConfidence',
+  id: 'KineticCareer',
   durationInSeconds: 5,
   fps: 30,
   width: 1080,
@@ -42,18 +42,19 @@ const EASINGS = {
 };
 
 // =============================================================================
-// KINETIC DATA (Synced to "CELTA turns that fear into confidence.")
+// KINETIC DATA (Synced to "Where can an online CELTA take your teaching career?")
 // =============================================================================
 const WORDS = [
-  // Scene 1: "CELTA turns that FEAR" (Frames 0-55)
-  { t: "CELTA", f: 0, dur: 35, s: 160, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: -60, y: -80, rot: -3, anim: 'slam' },
-  { t: "turns", f: 12, dur: 25, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 90, y: -110, rot: 4, anim: 'pop' },
-  { t: "that", f: 18, dur: 25, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 140, y: -50, rot: 6, anim: 'slideRight' },
-  { t: "FEAR", f: 26, dur: 35, s: 180, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 40, rot: 3, anim: 'overshoot' },
+  // Scene 1: "Where can an ONLINE CELTA" (Frames 0-60)
+  { t: "Where", f: 0, dur: 35, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -130, y: -100, rot: -4, anim: 'pop' },
+  { t: "can an", f: 8, dur: 27, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 100, y: -110, rot: 5, anim: 'slideRight' },
+  { t: "ONLINE", f: 16, dur: 40, s: 150, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: -40, y: -10, rot: -2, anim: 'slam' },
+  { t: "CELTA", f: 28, dur: 35, s: 170, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 40, y: 90, rot: 3, anim: 'overshoot' },
 
-  // Scene 2: "into CONFIDENCE" (Frames 55-120)
-  { t: "into", f: 55, dur: 25, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -100, y: -80, rot: -5, anim: 'slideDown' },
-  { t: "CONFIDENCE", f: 65, dur: 50, s: 135, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 20, rot: -2, anim: 'slam' },
+  // Scene 2: "take your TEACHING CAREER?" (Frames 60-130)
+  { t: "take your", f: 60, dur: 30, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -100, y: -90, rot: -5, anim: 'slideDown' },
+  { t: "TEACHING", f: 70, dur: 35, s: 140, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: 0, y: 0, rot: 2, anim: 'pop' },
+  { t: "CAREER?", f: 82, dur: 45, s: 180, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.4)', x: 0, y: 100, rot: -3, anim: 'slam' },
 ];
 
 // =============================================================================
@@ -155,14 +156,14 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
 const MainScene: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Dynamic Camera Shakes synced with "CELTA", "FEAR", and "CONFIDENCE"
+  // Dynamic Camera Shakes synced with "ONLINE", "CELTA", and "CAREER?"
   let shakeX = 0;
-  if (frame >= 0 && frame <= 6) {
-    shakeX = interpolate(frame, [0, 2, 4, 6], [0, -10, 10, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 26 && frame <= 32) {
-    shakeX = interpolate(frame, [26, 28, 30, 32], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  } else if (frame >= 65 && frame <= 72) {
-    shakeX = interpolate(frame, [65, 67, 69, 72], [0, -18, 18, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  if (frame >= 16 && frame <= 22) {
+    shakeX = interpolate(frame, [16, 17, 19, 22], [0, -12, 12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (frame >= 28 && frame <= 34) {
+    shakeX = interpolate(frame, [28, 29, 31, 34], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (frame >= 82 && frame <= 88) {
+    shakeX = interpolate(frame, [82, 83, 85, 88], [0, -20, 20, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   }
 
   const cameraScale = interpolate(frame, [0, 150], [1, 1.08], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
@@ -184,7 +185,7 @@ const MainScene: React.FC = () => {
 // =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const KineticConfidence: React.FC = () => {
+const KineticCareer: React.FC = () => {
   return (
     <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Aptos, Open Sans, system-ui, sans-serif' }}>
       <Background />
@@ -193,4 +194,4 @@ const KineticConfidence: React.FC = () => {
   );
 };
 
-export default KineticConfidence;
+export default KineticCareer;
