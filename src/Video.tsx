@@ -1,211 +1,280 @@
 import React from 'react';
 import {
   useCurrentFrame,
-  useVideoConfig,
   interpolate,
   Easing,
   AbsoluteFill,
   Sequence,
 } from 'remotion';
+import { evolvePath } from '@remotion/paths';
 
 // =============================================================================
-// CONFIGURATION
+// COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'BridgeToCeltaPro',
-  durationInSeconds: 50,
+  id: 'CeltaNeonPromo',
+  durationInSeconds: 46, // 1380 frames total (Scenes: 19s + 15s + 12s)
   fps: 30,
   width: 1080,
   height: 1920,
 };
 
+// =============================================================================
+// STYLES & THEME
+// =============================================================================
 const COLORS = {
-  bg: '#050510',
-  primary: '#3B44B5', // Knowledge Blue
-  accentYellow: '#F4CF80',
-  accentOrange: '#F4AB63',
-  accentGreen: '#B7DB6E',
-  accentPink: '#E070A2',
+  bgCenter: '#1F2466', 
+  bgEdge: '#0B0C24',   
+  grid: 'rgba(255, 255, 255, 0.04)',
+  
+  accentYellow: '#FACC15', 
+  accentOrange: '#FF5C00', 
+  accentGreen: '#10B981',  
+  accentPink: '#E070A2',   
+  accentCyan: '#06B6D4',
+  
   textWhite: '#FFFFFF',
-};
+  textMuted: '#9EA6EB',    
+} as const;
 
 const EASINGS = {
-  out: Easing.bezier(0.33, 1, 0.68, 1),
+  easeOut: Easing.bezier(0.33, 1, 0.68, 1),
+  easeIn: Easing.bezier(0.32, 0, 0.67, 0),
   overshoot: Easing.bezier(0.34, 1.56, 0.64, 1),
   slam: Easing.bezier(0.1, 1, 0.3, 1),
 };
 
 // =============================================================================
-// ICONS (Hand-drawn SVG Paths)
+// DATA: SCENE 1 (Bridge to CELTA...)
 // =============================================================================
-const ICONS = {
-  clock: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
-  calendar: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
-  globe: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z M3.6 9h16.8 M3.6 15h16.8 M12 3a15 15 0 000 18",
-  book: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253",
-  message: "M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z",
-};
+const WORDS_1 = [
+  { t: "Bridge", f: 0, dur: 60, s: 100, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: -120, y: -100, rot: -4, anim: 'pop' },
+  { t: "to", f: 10, dur: 50, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 60, y: -120, rot: 5, anim: 'pop' },
+  { t: "CELTA", f: 20, dur: 60, s: 180, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 0, y: 0, rot: -2, anim: 'slam' },
+
+  { t: "8 ДНІВ", f: 70, dur: 60, s: 130, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: -80, y: -80, rot: -3, anim: 'slideUp' },
+  { t: "48 ГОДИН", f: 90, dur: 50, s: 140, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: 60, y: 0, rot: 2, anim: 'slideLeft' },
+  { t: "ПРАКТИКИ", f: 110, dur: 60, s: 150, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.2)', x: 0, y: 100, rot: 0, anim: 'overshoot' },
+
+  { t: "Після", f: 160, dur: 40, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -140, y: -150, rot: -2, anim: 'pop' },
+  { t: "курсу", f: 170, dur: 40, s: 80, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 0, y: -150, rot: 0, anim: 'pop' },
+  { t: "ти будеш", f: 185, dur: 40, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -80, y: -80, rot: 3, anim: 'slideRight' },
+  { t: "РОЗУМІТИ", f: 200, dur: 50, s: 130, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 40, y: 0, rot: -4, anim: 'scaleUp' },
+
+  { t: "як будувати", f: 240, dur: 45, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -80, y: -120, rot: -2, anim: 'slideUp' },
+  { t: "УРОК", f: 255, dur: 60, s: 180, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: 0, y: -20, rot: 5, anim: 'slam' },
+  { t: "так щоб", f: 275, dur: 45, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: 80, rot: 0, anim: 'pop' },
+  { t: "він працював", f: 290, dur: 60, s: 110, c: COLORS.accentGreen, glow: 'rgba(16, 185, 129, 0.4)', x: 0, y: 160, rot: -2, anim: 'overshoot' },
+
+  { t: "Від структури", f: 340, dur: 50, s: 110, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: -80, rot: -2, anim: 'slideDown' },
+  { t: "ДО ФІДБЕКУ", f: 360, dur: 60, s: 150, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: 40, rot: 3, anim: 'slam' },
+
+  { t: "не теорія", f: 420, dur: 40, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -100, y: -120, rot: -3, anim: 'slideRight' },
+  { t: "з підручника", f: 435, dur: 40, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 40, y: -60, rot: 2, anim: 'slideLeft' },
+  { t: "а те що", f: 455, dur: 35, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: 20, rot: 0, anim: 'pop' },
+  { t: "РЕАЛЬНО", f: 470, dur: 50, s: 130, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: -40, y: 100, rot: -2, anim: 'scaleUp' },
+  { t: "ТРИМАЄ КЛАС", f: 490, dur: 70, s: 160, c: COLORS.accentGreen, glow: 'rgba(16, 185, 129, 0.5)', x: 0, y: 200, rot: 4, anim: 'slam' },
+];
+
+const LINES_1 = [
+  { d: "M -80 -80 Q -10 -120 60 0", c: COLORS.accentPink, f: 80, dur: 60 },
+  { d: "M 60 0 Q 80 60 0 100", c: COLORS.accentCyan, f: 100, dur: 70 },
+  { d: "M 0 -20 Q 100 70 0 160", c: COLORS.accentOrange, f: 275, dur: 75 },
+];
 
 // =============================================================================
-// SUB-COMPONENTS
+// DATA: SCENE 2 (International House...)
+// =============================================================================
+const WORDS_2 = [
+  { t: "INTERNATIONAL", f: 0, dur: 60, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: -100, rot: -2, anim: 'slideDown' },
+  { t: "HOUSE", f: 20, dur: 60, s: 190, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: 0, y: 0, rot: 3, anim: 'slam' },
+
+  { t: "мережа", f: 90, dur: 40, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -140, rot: -2, anim: 'slideRight' },
+  { t: "яка навчає", f: 105, dur: 45, s: 90, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: 60, y: -100, rot: 2, anim: 'slideLeft' },
+  { t: "ВЧИТЕЛІВ", f: 125, dur: 60, s: 150, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 0, y: 0, rot: -3, anim: 'overshoot' },
+
+  { t: "по всьому світу", f: 180, dur: 60, s: 110, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: -20, y: -100, rot: -2, anim: 'slideUp' },
+  { t: "вже понад", f: 200, dur: 50, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -100, y: 0, rot: 0, anim: 'pop' },
+  { t: "70 РОКІВ", f: 215, dur: 70, s: 190, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.5)', x: 0, y: 100, rot: 4, anim: 'slam' },
+
+  { t: "Більше", f: 290, dur: 40, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -120, y: -120, rot: -3, anim: 'slideRight' },
+  { t: "1000", f: 305, dur: 60, s: 200, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 40, y: -20, rot: 4, anim: 'slam' },
+  { t: "ВИПУСКНИКІВ", f: 330, dur: 50, s: 110, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 80, rot: -2, anim: 'slideUp' },
+  { t: "тільки в Україні", f: 350, dur: 80, s: 100, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: 0, y: 180, rot: 0, anim: 'pop' },
+];
+
+const LINES_2 = [
+  { d: "M 0 0 Q 100 -50 -20 -100", c: COLORS.accentYellow, f: 160, dur: 80 },
+  { d: "M 40 -20 Q -80 30 0 80 T 0 180", c: COLORS.accentCyan, f: 320, dur: 110 },
+];
+
+// =============================================================================
+// DATA: SCENE 3 (Курс стартує...)
+// =============================================================================
+const WORDS_3 = [
+  { t: "Курс", f: 0, dur: 40, s: 90, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.05)', x: -120, y: -150, rot: -2, anim: 'pop' },
+  { t: "СТАРТУЄ", f: 15, dur: 50, s: 120, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: 60, y: -150, rot: 3, anim: 'scaleUp' },
+  { t: "1 ЧЕРВНЯ", f: 35, dur: 70, s: 220, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.5)', x: 0, y: -30, rot: -4, anim: 'slam' },
+  { t: "ОНЛАЙН", f: 65, dur: 60, s: 140, c: COLORS.accentGreen, glow: 'rgba(16, 185, 129, 0.4)', x: 0, y: 100, rot: 2, anim: 'overshoot' },
+
+  { t: "Якщо хочеш деталі", f: 140, dur: 50, s: 90, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -120, rot: -2, anim: 'slideDown' },
+  { t: "залишай заявку", f: 160, dur: 50, s: 100, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: -40, rot: 2, anim: 'slideLeft' },
+  { t: "або просто пиши", f: 185, dur: 45, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: 40, rot: -1, anim: 'pop' },
+  { t: "BRIDGE", f: 210, dur: 100, s: 260, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.6)', x: 0, y: 150, rot: -4, anim: 'slam' },
+  { t: "в коментарях", f: 240, dur: 70, s: 80, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: 280, rot: 0, anim: 'slideUp' },
+];
+
+const LINES_3 = [
+  { d: "M 60 -150 Q 150 -90 0 -30 T 0 100", c: COLORS.accentOrange, f: 25, dur: 100 },
+];
+
+// =============================================================================
+// COMPONENTS
 // =============================================================================
 
-const IconBox: React.FC<{ path: string; color: string; delay: number }> = ({ path, color, delay }) => {
+const Background: React.FC = () => {
   const frame = useCurrentFrame();
-  const progress = interpolate(frame - delay, [0, 15], [0, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp' });
-  
+  const panY = (frame * 1.5) % 120;
+
   return (
-    <div style={{ transform: `scale(${progress})`, opacity: progress, marginBottom: 20 }}>
-      <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d={path} />
-      </svg>
-    </div>
+    <AbsoluteFill style={{ background: `radial-gradient(circle at 50% 50%, ${COLORS.bgCenter} 0%, ${COLORS.bgEdge} 100%)`, zIndex: 1 }}>
+      <div
+        style={{
+          position: 'absolute',
+          inset: -200,
+          backgroundImage: `linear-gradient(${COLORS.grid} 2px, transparent 2px), linear-gradient(90deg, ${COLORS.grid} 2px, transparent 2px)`,
+          backgroundSize: '120px 120px',
+          transform: `translateY(${panY}px)`,
+        }}
+      />
+    </AbsoluteFill>
   );
 };
 
-const FloatingParticle: React.FC<{ seed: number }> = ({ seed }) => {
+const NeonPath: React.FC<{ d: string, color: string, f: number, dur: number }> = ({ d, color, f, dur }) => {
   const frame = useCurrentFrame();
-  const { width, height } = useVideoConfig();
-  const x = (seed * 12345) % width;
-  const startY = (seed * 67890) % height;
-  const y = startY - (frame * (1 + seed));
-  const opacity = interpolate(y, [0, 200], [0, 0.3], { extrapolateRight: 'clamp' });
+  const relFrame = frame - f;
+  
+  if (relFrame < 0 || relFrame > dur) return null;
+
+  const progress = interpolate(relFrame, [0, 20], [0, 1], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacity = interpolate(relFrame, [dur - 10, dur], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const { strokeDasharray, strokeDashoffset } = evolvePath(progress, d);
+
+  return (
+    <svg viewBox="-540 -960 1080 1920" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 2, overflow: 'visible', opacity }}>
+      <path 
+        d={d} 
+        fill="none" 
+        stroke={color} 
+        strokeWidth={6} 
+        strokeDasharray={strokeDasharray} 
+        strokeDashoffset={strokeDashoffset} 
+        strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 12px ${color})` }} 
+      />
+    </svg>
+  );
+};
+
+const KineticWord: React.FC<{ word: any }> = ({ word }) => {
+  const frame = useCurrentFrame();
+  const relFrame = frame - word.f;
+  
+  if (relFrame < 0 || relFrame > word.dur) return null;
+  
+  const opacityIn = interpolate(relFrame, [0, 5], [0, 1], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacityOut = interpolate(relFrame, [word.dur - 5, word.dur], [1, 0], { easing: EASINGS.easeIn, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const currentOpacity = Math.min(opacityIn, opacityOut);
+
+  let baseScale = 1;
+  let curX = word.x;
+  let curY = word.y;
+  
+  if (word.anim === 'pop') {
+    baseScale = interpolate(relFrame, [0, 8], [0.4, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'scaleUp') {
+    baseScale = interpolate(relFrame, [0, word.dur], [0.8, 1.1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideUp') {
+    curY += interpolate(relFrame, [0, 8], [60, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideRight') {
+    curX += interpolate(relFrame, [0, 8], [-80, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideLeft') {
+    curX += interpolate(relFrame, [0, 8], [80, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slam') {
+    baseScale = interpolate(relFrame, [0, 6], [3, 1], { easing: EASINGS.slam, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'overshoot') {
+    baseScale = interpolate(relFrame, [0, 12], [0, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slideDown') {
+    curY += interpolate(relFrame, [0, 8], [-60, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  }
+
+  const enterBlur = interpolate(relFrame, [0, 6], [15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const exitProgress = interpolate(relFrame, [word.dur - 5, word.dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  
+  const finalScale = baseScale * interpolate(exitProgress, [0, 1], [1, 0.8]);
+  const finalY = curY + interpolate(exitProgress, [0, 1], [0, 40]);
+  const exitBlur = interpolate(exitProgress, [0, 1], [0, 15]);
 
   return (
     <div style={{
       position: 'absolute',
-      left: x,
-      top: y,
-      width: 4,
-      height: 4,
-      backgroundColor: COLORS.textWhite,
-      borderRadius: '50%',
-      opacity,
-    }} />
+      left: '50%',
+      top: '50%',
+      transform: `translate(-50%, -50%) translate(${curX}px, ${finalY}px) rotate(${word.rot}deg) scale(${finalScale})`,
+      opacity: currentOpacity,
+      color: word.c,
+      fontSize: word.s,
+      fontWeight: 900,
+      letterSpacing: '-2px',
+      textTransform: 'uppercase',
+      filter: `blur(${enterBlur + exitBlur}px) drop-shadow(0 10px 30px ${word.glow})`,
+      whiteSpace: 'nowrap',
+      margin: 0,
+      lineHeight: 1,
+      zIndex: 3,
+    }}>
+      {word.t}
+    </div>
+  );
+};
+
+const Scene: React.FC<{ words: any[], lines: any[] }> = ({ words, lines }) => {
+  const frame = useCurrentFrame();
+  const segmentZoom = interpolate(frame, [0, 600], [1, 1.08], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, transform: `scale(${segmentZoom})`, zIndex: 2 }}>
+      {lines.map((line, i) => <NeonPath key={`line-${i}`} d={line.d} color={line.c} f={line.f} dur={line.dur} />)}
+      {words.map((word, i) => <KineticWord key={`word-${i}`} word={word} />)}
+    </div>
   );
 };
 
 // =============================================================================
-// SCENES
+// MAIN COMPOSITION
 // =============================================================================
-
-const Scene1: React.FC = () => {
-  const frame = useCurrentFrame();
-  const spring = interpolate(frame, [0, 20], [0, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp' });
-
+const CeltaNeonPromo: React.FC = () => {
   return (
-    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: 60 }}>
-      <div style={{ transform: `scale(${spring})`, textAlign: 'center' }}>
-        <h1 style={{ fontSize: 120, color: COLORS.accentOrange, margin: 0, fontWeight: 900 }}>BRIDGE TO CELTA</h1>
-        <div style={{ height: 10, width: 400, backgroundColor: COLORS.accentOrange, margin: '20px auto', borderRadius: 5 }} />
-        <div style={{ display: 'flex', gap: 40, marginTop: 40 }}>
-          <div>
-            <IconBox path={ICONS.calendar} color={COLORS.accentPink} delay={10} />
-            <h2 style={{ fontSize: 60, color: COLORS.textWhite, margin: 0 }}>8 ДНІВ</h2>
-          </div>
-          <div>
-            <IconBox path={ICONS.clock} color={COLORS.accentCyan || '#00E5FF'} delay={20} />
-            <h2 style={{ fontSize: 60, color: COLORS.textWhite, margin: 0 }}>48 ГОДИН</h2>
-          </div>
-        </div>
-        <p style={{ fontSize: 45, color: COLORS.textWhite, marginTop: 60, lineHeight: 1.4 }}>
-          Практика, яка реально <br/> <span style={{ color: COLORS.accentYellow }}>тримає клас</span>
-        </p>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-const Scene2: React.FC = () => {
-  const frame = useCurrentFrame();
-  const slide = interpolate(frame, [0, 15], [100, 0], { easing: EASINGS.out, extrapolateLeft: 'clamp' });
-  
-  return (
-    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: 80 }}>
-      <div style={{ transform: `translateY(${slide}px)`, textAlign: 'center' }}>
-        <IconBox path={ICONS.book} color={COLORS.accentGreen} delay={5} />
-        <h2 style={{ fontSize: 80, color: COLORS.textWhite, marginBottom: 40 }}>ВІД СТРУКТУРИ ДО ФІДБЕКУ</h2>
-        <div style={{ backgroundColor: 'rgba(255,255,255,0.1)', padding: 40, borderRadius: 30, border: `2px solid ${COLORS.accentGreen}` }}>
-          <p style={{ fontSize: 50, color: COLORS.textWhite, margin: 0 }}>
-            Це не теорія з підручника, <br/>
-            а <strong>реальні інструменти</strong>
-          </p>
-        </div>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-const Scene3: React.FC = () => {
-  const frame = useCurrentFrame();
-  const { width } = useVideoConfig();
-  const progress = interpolate(frame, [0, 100], [0, 1], { extrapolateRight: 'clamp' });
-
-  return (
-    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', padding: 60 }}>
-      <IconBox path={ICONS.globe} color={COLORS.accentYellow} delay={0} />
-      <h1 style={{ fontSize: 90, color: COLORS.textWhite, textAlign: 'center', marginBottom: 20 }}>International House</h1>
-      <p style={{ fontSize: 50, color: COLORS.accentYellow }}>70 РОКІВ ДОСВІДУ</p>
+    <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <Background />
       
-      <div style={{ marginTop: 60, textAlign: 'center' }}>
-        <div style={{ fontSize: 120, fontWeight: 900, color: COLORS.textWhite }}>
-          {Math.round(progress * 1000)}+
-        </div>
-        <p style={{ fontSize: 40, color: COLORS.textMuted || '#999' }}>Випускників в Україні</p>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-const SceneFinal: React.FC = () => {
-  const frame = useCurrentFrame();
-  const pulse = Math.sin(frame / 5) * 0.05 + 1;
-
-  return (
-    <AbsoluteFill style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.primary }}>
-      <div style={{ transform: `scale(${pulse})`, textAlign: 'center' }}>
-        <h2 style={{ fontSize: 60, color: COLORS.textWhite }}>СТАРТ КУРСУ:</h2>
-        <h1 style={{ fontSize: 150, color: COLORS.accentYellow, margin: '20px 0' }}>1 ЧЕРВНЯ</h1>
-        
-        <div style={{ marginTop: 80, padding: '30px 60px', backgroundColor: COLORS.textWhite, borderRadius: 100 }}>
-          <span style={{ fontSize: 60, color: COLORS.primary, fontWeight: 900 }}>ПИШИ "BRIDGE"</span>
-        </div>
-        
-        <div style={{ marginTop: 40 }}>
-           <IconBox path={ICONS.message} color={COLORS.textWhite} delay={10} />
-        </div>
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// =============================================================================
-// MAIN ENTRY
-// =============================================================================
-
-const BridgeToCeltaPro: React.FC = () => {
-  return (
-    <AbsoluteFill style={{ backgroundColor: COLORS.bg, fontFamily: 'system-ui, sans-serif' }}>
-      {/* Background Particles */}
-      {[...Array(30)].map((_, i) => <FloatingParticle key={i} seed={i} />)}
-
-      <Sequence from={0} durationInFrames={300}>
-        <Scene1 />
+      {/* SCENE 1: 0 to 19.3 seconds */}
+      <Sequence from={0} durationInFrames={580}>
+        <Scene words={WORDS_1} lines={LINES_1} />
       </Sequence>
 
-      <Sequence from={300} durationInFrames={300}>
-        <Scene2 />
+      {/* SCENE 2: 19.3 to 34.3 seconds */}
+      <Sequence from={580} durationInFrames={450}>
+        <Scene words={WORDS_2} lines={LINES_2} />
       </Sequence>
 
-      <Sequence from={600} durationInFrames={400}>
-        <Scene3 />
-      </Sequence>
-
-      <Sequence from={1000} durationInFrames={500}>
-        <SceneFinal />
+      {/* SCENE 3: 34.3 to 46 seconds */}
+      <Sequence from={1030} durationInFrames={350}>
+        <Scene words={WORDS_3} lines={LINES_3} />
       </Sequence>
     </AbsoluteFill>
   );
 };
 
-export default BridgeToCeltaPro;
+export default CeltaNeonPromo;
