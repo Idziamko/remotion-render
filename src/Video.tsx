@@ -1,36 +1,37 @@
 import React from 'react';
 import {
   useCurrentFrame,
-  useVideoConfig,
   interpolate,
   Easing,
   AbsoluteFill,
-  Sequence,
 } from 'remotion';
+import { evolvePath } from '@remotion/paths';
 
 // =============================================================================
-// COMPOSITION CONFIG
+// COMPOSITION CONFIGURATION
 // =============================================================================
 export const compositionConfig = {
-  id: 'BridgeToCeltaPromo',
-  durationInSeconds: 20,
-  fps: 30,
+  id: 'CeltaPartOne',
+  durationInSeconds: 5,
+  fps: 30, // 150 frames total
   width: 1080,
   height: 1920,
 };
 
 // =============================================================================
-// BRAND THEME (Exact match to KineticAudioSync example)
+// STYLES & THEME
 // =============================================================================
 const COLORS = {
   bgCenter: '#1F2466',
   bgEdge: '#0B0C24',
   grid: 'rgba(255, 255, 255, 0.04)',
-  accentYellow: '#F4CF80',
-  accentOrange: '#F4AB63',
-  accentGreen: '#B7DB6E',
+
+  accentYellow: '#FACC15',
+  accentOrange: '#FF5C00',
+  accentGreen: '#10B981',
   accentPink: '#E070A2',
-  accentBlue: '#3B82F6',
+  accentCyan: '#06B6D4',
+
   textWhite: '#FFFFFF',
   textMuted: '#9EA6EB',
 } as const;
@@ -43,71 +44,56 @@ const EASINGS = {
 };
 
 // =============================================================================
-// BLOCK 1: Bridge to CELTA — Benefits (Frames 0–199)
-// "8 днів, 48 годин практики… від структури до фідбеку"
+// ICONS PATHS (24x24 viewBox)
 // =============================================================================
-const BLOCK1_WORDS = [
-  { t: 'Bridge', f: 0, dur: 20, s: 72, c: COLORS.accentBlue, glow: 'rgba(59, 130, 246, 0.4)', x: 0, y: -200, rot: -3, anim: 'pop' },
-  { t: 'to', f: 8, dur: 15, s: 48, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 0, y: -140, rot: 2, anim: 'slideUp' },
-  { t: 'CELTA', f: 12, dur: 28, s: 100, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.5)', x: 0, y: -60, rot: 0, anim: 'slam' },
-  
-  { t: '8 днів', f: 45, dur: 22, s: 64, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.4)', x: -150, y: 40, rot: -4, anim: 'overshoot' },
-  { t: '48 годин', f: 55, dur: 22, s: 64, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 150, y: 40, rot: 4, anim: 'overshoot' },
-  { t: 'практики', f: 65, dur: 25, s: 52, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 120, rot: 0, anim: 'slideUp' },
-  
-  { t: 'Від структури', f: 100, dur: 28, s: 44, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -170, y: 210, rot: -2, anim: 'slideRight' },
-  { t: 'до фідбеку', f: 112, dur: 28, s: 44, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 170, y: 210, rot: 2, anim: 'slideLeft' },
-  
-  { t: 'Не теорія', f: 145, dur: 20, s: 40, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -130, y: 300, rot: -2, anim: 'pop' },
-  { t: 'а практика', f: 155, dur: 20, s: 40, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 300, rot: 0, anim: 'pop' },
-  { t: 'що тримає клас', f: 165, dur: 34, s: 48, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.5)', x: 0, y: 370, rot: 0, anim: 'overshoot' },
+const ICON_PATHS = {
+  calendar: [
+    "M16 2v4", 
+    "M8 2v4", 
+    "M3 10h18", 
+    "M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"
+  ],
+  clock: [
+    "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z", 
+    "M12 6v6l4 2"
+  ],
+};
+
+// =============================================================================
+// KINETIC DATA
+// =============================================================================
+const WORDS = [
+  { t: "Bridge", f: 0, dur: 150, s: 70, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: -80, y: -250, rot: -4, anim: 'pop' },
+  { t: "to", f: 8, dur: 142, s: 50, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 60, y: -260, rot: 5, anim: 'pop' },
+  { t: "CELTA", f: 18, dur: 132, s: 150, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 0, y: -130, rot: -2, anim: 'slam' },
+
+  { t: "це", f: 35, dur: 115, s: 60, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: -20, rot: 0, anim: 'pop' },
+
+  { t: "8 ДНІВ", f: 55, dur: 95, s: 90, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: -140, y: 180, rot: -3, anim: 'slideUp' },
+  { t: "48 ГОДИН", f: 75, dur: 75, s: 90, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: 140, y: 180, rot: 2, anim: 'slideLeft' },
+
+  { t: "ПРАКТИКИ", f: 100, dur: 50, s: 120, c: COLORS.accentGreen, glow: 'rgba(16, 185, 129, 0.5)', x: 0, y: 320, rot: 0, anim: 'overshoot' },
+];
+
+const ICONS = [
+  { paths: ICON_PATHS.calendar, colors: [COLORS.accentPink, COLORS.accentPink, COLORS.accentPink, COLORS.accentPink], f: 60, dur: 90, x: -140, y: 80, s: 3.5, glow: 'rgba(224, 112, 162, 0.4)' },
+  { paths: ICON_PATHS.clock, colors: [COLORS.accentCyan, COLORS.accentCyan], f: 80, dur: 70, x: 140, y: 80, s: 3.5, glow: 'rgba(6, 182, 212, 0.4)' }
+];
+
+const LINES = [
+  { d: "M 0 -20 Q -140 30 -140 80", c: COLORS.accentPink, f: 65, dur: 85 },
+  { d: "M 0 -20 Q 140 30 140 80", c: COLORS.accentCyan, f: 85, dur: 65 },
+  { d: "M -140 180 Q 0 250 0 320", c: COLORS.accentGreen, f: 105, dur: 45 },
+  { d: "M 140 180 Q 0 250 0 320", c: COLORS.accentGreen, f: 105, dur: 45 },
 ];
 
 // =============================================================================
-// BLOCK 2: International House — Credibility (Frames 200–399)
-// "70 років • 1000+ випускників • знаємо що працює"
+// COMPONENTS
 // =============================================================================
-const BLOCK2_WORDS = [
-  { t: 'International', f: 0, dur: 25, s: 48, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -190, y: -120, rot: -3, anim: 'slideRight' },
-  { t: 'House', f: 10, dur: 25, s: 72, c: COLORS.accentBlue, glow: 'rgba(59, 130, 246, 0.4)', x: 190, y: -120, rot: 3, anim: 'slideLeft' },
-  
-  { t: '70+ років', f: 40, dur: 32, s: 80, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.5)', x: 0, y: -30, rot: 0, anim: 'slam' },
-  { t: 'по всьому світу', f: 60, dur: 28, s: 42, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 60, rot: 0, anim: 'slideUp' },
-  
-  { t: '1000+', f: 100, dur: 28, s: 92, c: COLORS.accentGreen, glow: 'rgba(183, 219, 110, 0.5)', x: -110, y: 150, rot: -4, anim: 'overshoot' },
-  { t: 'випускників', f: 110, dur: 28, s: 42, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 110, y: 150, rot: 4, anim: 'overshoot' },
-  { t: 'в Україні', f: 120, dur: 25, s: 46, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: 0, y: 220, rot: 0, anim: 'pop' },
-  
-  { t: 'Ми знаємо', f: 155, dur: 20, s: 38, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -140, y: 310, rot: -2, anim: 'slideRight' },
-  { t: 'що працює', f: 165, dur: 20, s: 38, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 310, rot: 0, anim: 'pop' },
-  { t: 'сьогодні', f: 175, dur: 25, s: 44, c: COLORS.accentOrange, glow: 'rgba(244, 171, 99, 0.4)', x: 0, y: 380, rot: 0, anim: 'overshoot' },
-];
 
-// =============================================================================
-// BLOCK 3: CTA — Call to Action (Frames 400–599)
-// "Старт 1 червня • пиши 'BRIDGE' в коментарях"
-// =============================================================================
-const BLOCK3_WORDS = [
-  { t: 'Старт', f: 0, dur: 18, s: 56, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -130, y: -90, rot: -3, anim: 'slideRight' },
-  { t: '1 червня', f: 8, dur: 28, s: 76, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.5)', x: 130, y: -90, rot: 3, anim: 'slideLeft' },
-  { t: 'онлайн', f: 28, dur: 22, s: 52, c: COLORS.accentBlue, glow: 'rgba(59, 130, 246, 0.4)', x: 0, y: 0, rot: 0, anim: 'pop' },
-  
-  { t: 'Хочеш деталі?', f: 60, dur: 28, s: 46, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 90, rot: 0, anim: 'slideUp' },
-  
-  { t: 'Пиши', f: 95, dur: 18, s: 42, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: -110, y: 180, rot: -2, anim: 'pop' },
-  { t: '"BRIDGE"', f: 102, dur: 38, s: 68, c: COLORS.accentYellow, glow: 'rgba(244, 207, 128, 0.6)', x: 0, y: 180, rot: 0, anim: 'slam', isCta: true },
-  { t: 'в коментарях', f: 120, dur: 28, s: 40, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: 260, rot: 0, anim: 'slideUp' },
-  
-  { t: '👇', f: 145, dur: 40, s: 80, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.5)', x: 0, y: 370, rot: 0, anim: 'overshoot' },
-];
-
-// =============================================================================
-// BACKGROUND (Animated Grid + Gradient)
-// =============================================================================
 const Background: React.FC = () => {
   const frame = useCurrentFrame();
-  const { height } = useVideoConfig();
-  const panY = (frame * 1.5) % (height + 400);
+  const panY = (frame * 1.5) % 120;
 
   return (
     <AbsoluteFill
@@ -120,216 +106,167 @@ const Background: React.FC = () => {
         style={{
           position: 'absolute',
           inset: -200,
-          backgroundImage: `linear-gradient(${COLORS.grid} 1px, transparent 1px), linear-gradient(90deg, ${COLORS.grid} 1px, transparent 1px)`,
-          backgroundSize: '100px 100px',
-          transform: `translateY(${panY - 200}px)`,
+          backgroundImage: `linear-gradient(${COLORS.grid} 2px, transparent 2px), linear-gradient(90deg, ${COLORS.grid} 2px, transparent 2px)`,
+          backgroundSize: '120px 120px',
+          transform: `translateY(${panY}px)`,
         }}
       />
     </AbsoluteFill>
   );
 };
 
-// =============================================================================
-// KINETIC WORD (Exact logic from KineticAudioSync example)
-// =============================================================================
-const KineticWord: React.FC<{ word: typeof BLOCK1_WORDS[0] }> = ({ word }) => {
+const NeonIcon: React.FC<{ paths: string[], colors: string[], f: number, dur: number, x: number, y: number, s: number, glow: string }> = ({ paths, colors, f, dur, x, y, s, glow }) => {
+  const frame = useCurrentFrame();
+  const relFrame = frame - f;
+
+  if (relFrame < 0 || relFrame > dur) return null;
+
+  const progress = interpolate(relFrame, [0, 15], [0, 1], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacity = interpolate(relFrame, [dur - 10, dur], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const enterBlur = interpolate(relFrame, [0, 8], [15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+
+  return (
+    <div style={{
+      position: 'absolute',
+      left: '50%',
+      top: '50%',
+      transform: `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${s})`,
+      opacity,
+      filter: `blur(${enterBlur}px) drop-shadow(0 0 10px ${glow})`,
+      zIndex: 3,
+    }}>
+      <svg viewBox="0 0 24 24" width="24" height="24" style={{ overflow: 'visible' }}>
+        {paths.map((p, i) => {
+          const { strokeDasharray, strokeDashoffset } = evolvePath(progress, p);
+          return (
+            <path
+              key={i}
+              d={p}
+              fill="none"
+              stroke={colors[i] || colors[0]}
+              strokeWidth={1.5}
+              strokeDasharray={strokeDasharray}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          );
+        })}
+      </svg>
+    </div>
+  );
+};
+
+const NeonPath: React.FC<{ d: string, color: string, f: number, dur: number }> = ({ d, color, f, dur }) => {
+  const frame = useCurrentFrame();
+  const relFrame = frame - f;
+
+  if (relFrame < 0 || relFrame > dur) return null;
+
+  const progress = interpolate(relFrame, [0, 20], [0, 1], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacity = interpolate(relFrame, [dur - 10, dur], [1, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const { strokeDasharray, strokeDashoffset } = evolvePath(progress, d);
+
+  return (
+    <svg viewBox="-540 -960 1080 1920" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 2, overflow: 'visible', opacity }}>
+      <path
+        d={d}
+        fill="none"
+        stroke={color}
+        strokeWidth={4}
+        strokeDasharray={strokeDasharray}
+        strokeDashoffset={strokeDashoffset}
+        strokeLinecap="round"
+        style={{ filter: `drop-shadow(0 0 10px ${color})` }}
+      />
+    </svg>
+  );
+};
+
+const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
   const frame = useCurrentFrame();
   const relFrame = frame - word.f;
 
-  // Opacity fade in/out
-  const opacityIn = interpolate(relFrame, [0, 5], [0, 1], {
-    easing: EASINGS.easeOut,
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const opacityOut = interpolate(relFrame, [word.dur - 5, word.dur], [1, 0], {
-    easing: EASINGS.easeIn,
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const opacity = Math.min(opacityIn, opacityOut);
+  if (relFrame < 0 || relFrame > word.dur) return null;
 
-  // Animation entrance
-  let scale = 1;
-  let x = word.x;
-  let y = word.y;
+  const opacityIn = interpolate(relFrame, [0, 5], [0, 1], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacityOut = interpolate(relFrame, [word.dur - 5, word.dur], [1, 0], { easing: EASINGS.easeIn, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const currentOpacity = Math.min(opacityIn, opacityOut);
+
+  let baseScale = 1;
+  let curX = word.x;
+  let curY = word.y;
 
   if (word.anim === 'pop') {
-    scale = interpolate(relFrame, [0, 8], [0.4, 1], {
-      easing: EASINGS.overshoot,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    });
-  } else if (word.anim === 'slam') {
-    scale = interpolate(relFrame, [0, 6], [2.5, 1], {
-      easing: EASINGS.slam,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    });
-  } else if (word.anim === 'overshoot') {
-    scale = interpolate(relFrame, [0, 12], [0, 1], {
-      easing: EASINGS.overshoot,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    });
+    baseScale = interpolate(relFrame, [0, 8], [0.4, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'scaleUp') {
+    baseScale = interpolate(relFrame, [0, word.dur], [0.8, 1.1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   } else if (word.anim === 'slideUp') {
-    y += interpolate(relFrame, [0, 8], [60, 0], {
-      easing: EASINGS.easeOut,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    });
+    curY += interpolate(relFrame, [0, 8], [60, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   } else if (word.anim === 'slideRight') {
-    x += interpolate(relFrame, [0, 8], [-90, 0], {
-      easing: EASINGS.easeOut,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    });
+    curX += interpolate(relFrame, [0, 8], [-80, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   } else if (word.anim === 'slideLeft') {
-    x += interpolate(relFrame, [0, 8], [90, 0], {
-      easing: EASINGS.easeOut,
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
-    });
+    curX += interpolate(relFrame, [0, 8], [80, 0], { easing: EASINGS.easeOut, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'slam') {
+    baseScale = interpolate(relFrame, [0, 6], [3, 1], { easing: EASINGS.slam, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  } else if (word.anim === 'overshoot') {
+    baseScale = interpolate(relFrame, [0, 12], [0, 1], { easing: EASINGS.overshoot, extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   }
 
-  // Exit animation
-  const exit = interpolate(relFrame, [word.dur - 5, word.dur], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const finalScale = scale * interpolate(exit, [0, 1], [1, 0.85]);
-  const finalY = y + interpolate(exit, [0, 1], [0, 40]);
+  const enterBlur = interpolate(relFrame, [0, 6], [15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const exitProgress = interpolate(relFrame, [word.dur - 5, word.dur], [0, 1], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
 
-  // Blur for smooth entry/exit
-  const blurIn = interpolate(relFrame, [0, 5], [12, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  const blurOut = interpolate(relFrame, [word.dur - 5, word.dur], [0, 12], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-
-  // CTA badge style
-  const ctaStyle = word.isCta
-    ? {
-        backgroundColor: COLORS.accentYellow,
-        color: COLORS.bgCenter,
-        paddingHorizontal: 20,
-        paddingVertical: 6,
-        borderRadius: 10,
-        fontWeight: 900,
-      }
-    : {};
+  const finalScale = baseScale * interpolate(exitProgress, [0, 1], [1, 0.8]);
+  const finalY = curY + interpolate(exitProgress, [0, 1], [0, 30]);
+  const exitBlur = interpolate(exitProgress, [0, 1], [0, 10]);
 
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left: '50%',
-        top: '50%',
-        transform: `translate(-50%, -50%) translate(${x}px, ${finalY}px) rotate(${word.rot}deg) scale(${finalScale})`,
-        opacity,
-        color: word.c,
-        fontSize: word.s,
-        fontWeight: word.isCta ? 900 : 700,
-        letterSpacing: '-1px',
-        textTransform: word.t === word.t.toUpperCase() && word.t.length > 3 ? 'uppercase' : 'none',
-        filter: `blur(${blurIn + blurOut}px) drop-shadow(0 10px 25px ${word.glow})`,
-        whiteSpace: 'nowrap',
-        margin: 0,
-        lineHeight: 1,
-        zIndex: 3,
-        textAlign: 'center',
-        fontFamily: 'Inter, system-ui, sans-serif',
-        ...ctaStyle,
-      }}
-    >
+    <div style={{
+      position: 'absolute',
+      left: '50%',
+      top: '50%',
+      transform: `translate(-50%, -50%) translate(${curX}px, ${finalY}px) rotate(${word.rot}deg) scale(${finalScale})`,
+      opacity: currentOpacity,
+      color: word.c,
+      fontSize: word.s,
+      fontWeight: 900,
+      letterSpacing: '-1px',
+      textTransform: 'uppercase',
+      filter: `blur(${enterBlur + exitBlur}px) drop-shadow(0 10px 25px ${word.glow})`,
+      whiteSpace: 'nowrap',
+      margin: 0,
+      lineHeight: 1,
+      zIndex: 4,
+    }}>
       {word.t}
     </div>
   );
 };
 
 // =============================================================================
-// BLOCK COMPONENTS (3 clear blocks)
-// =============================================================================
-const Block1: React.FC = () => {
-  const frame = useCurrentFrame();
-  const zoom = interpolate(frame, [0, 199], [1, 1.04], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <AbsoluteFill style={{ zIndex: 2 }}>
-      <div style={{ position: 'absolute', inset: 0, transform: `scale(${zoom})` }}>
-        {BLOCK1_WORDS.map((w, i) => <KineticWord key={`b1-${i}`} word={w} />)}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-const Block2: React.FC = () => {
-  const frame = useCurrentFrame();
-  const zoom = interpolate(frame, [0, 199], [1, 1.04], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <AbsoluteFill style={{ zIndex: 2 }}>
-      <div style={{ position: 'absolute', inset: 0, transform: `scale(${zoom})` }}>
-        {BLOCK2_WORDS.map((w, i) => <KineticWord key={`b2-${i}`} word={w} />)}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-const Block3: React.FC = () => {
-  const frame = useCurrentFrame();
-  const zoom = interpolate(frame, [0, 199], [1, 1.04], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
-  return (
-    <AbsoluteFill style={{ zIndex: 2 }}>
-      <div style={{ position: 'absolute', inset: 0, transform: `scale(${zoom})` }}>
-        {BLOCK3_WORDS.map((w, i) => <KineticWord key={`b3-${i}`} word={w} />)}
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// =============================================================================
 // MAIN COMPOSITION
 // =============================================================================
-const BridgeToCeltaPromo: React.FC = () => {
+const CeltaPartOne: React.FC = () => {
+  const frame = useCurrentFrame();
+
+  // Subtle continuous zoom and slam shakes
+  const segmentZoom = interpolate(frame, [0, 150], [1, 1.05], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  
+  let shakeX = 0;
+  if (frame >= 18 && frame <= 24) {
+    shakeX = interpolate(frame, [18, 20, 22, 24], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  }
+
   return (
-    <AbsoluteFill
-      style={{
-        backgroundColor: COLORS.bgEdge,
-        fontFamily: 'Inter, system-ui, sans-serif',
-        overflow: 'hidden',
-      }}
-    >
+    <AbsoluteFill style={{ backgroundColor: '#000', fontFamily: 'Inter, system-ui, sans-serif' }}>
       <Background />
-
-      {/* BLOCK 1: Benefits */}
-      <Sequence from={0} durationInFrames={200}>
-        <Block1 />
-      </Sequence>
-
-      {/* BLOCK 2: Credibility */}
-      <Sequence from={200} durationInFrames={200}>
-        <Block2 />
-      </Sequence>
-
-      {/* BLOCK 3: CTA */}
-      <Sequence from={400} durationInFrames={200}>
-        <Block3 />
-      </Sequence>
-
-      {/* Footer credit */}
-      <AbsoluteFill
-        style={{
-          position: 'absolute',
-          bottom: '6%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          fontSize: 18,
-          color: COLORS.textMuted,
-          opacity: 0.6,
-          zIndex: 4,
-          fontFamily: 'system-ui, sans-serif',
-        }}
-      >
-        Субтитрувальниця Оля Шор
-      </AbsoluteFill>
+      <div style={{ position: 'absolute', inset: 0, transform: `scale(${segmentZoom}) translateX(${shakeX}px)`, zIndex: 2 }}>
+        {ICONS.map((icon, i) => <NeonIcon key={`icon-${i}`} {...icon} />)}
+        {LINES.map((line, i) => <NeonPath key={`line-${i}`} d={line.d} color={line.c} f={line.f} dur={line.dur} />)}
+        {WORDS.map((word, i) => <KineticWord key={`word-${i}`} word={word} />)}
+      </div>
     </AbsoluteFill>
   );
 };
 
-export default BridgeToCeltaPromo;
+export default CeltaPartOne;
