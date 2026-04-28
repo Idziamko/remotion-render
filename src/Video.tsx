@@ -60,31 +60,39 @@ const ICON_PATHS = {
 };
 
 // =============================================================================
-// KINETIC DATA
+// KINETIC DATA (Fully Re-calculated Grid)
 // =============================================================================
 const WORDS = [
-  { t: "Bridge", f: 0, dur: 150, s: 70, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: -80, y: -250, rot: -4, anim: 'pop' },
-  { t: "to", f: 8, dur: 142, s: 50, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 60, y: -260, rot: 5, anim: 'pop' },
-  { t: "CELTA", f: 18, dur: 132, s: 150, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 0, y: -130, rot: -2, anim: 'slam' },
+  // Блок 1: Верх (Разнесены по X и Y, чтобы не слипались)
+  { t: "Bridge", f: 0, dur: 150, s: 90, c: COLORS.accentOrange, glow: 'rgba(255, 92, 0, 0.4)', x: -160, y: -420, rot: -3, anim: 'pop' },
+  { t: "to", f: 5, dur: 145, s: 70, c: COLORS.textMuted, glow: 'rgba(255,255,255,0.05)', x: 120, y: -420, rot: 5, anim: 'pop' },
+  
+  // Блок 2: Огромный заголовок по центру-сверху
+  { t: "CELTA", f: 15, dur: 135, s: 200, c: COLORS.accentYellow, glow: 'rgba(250, 204, 21, 0.4)', x: 0, y: -250, rot: -1, anim: 'slam' },
 
-  { t: "це", f: 35, dur: 115, s: 60, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: -20, rot: 0, anim: 'pop' },
+  // Блок 3: Связка
+  { t: "це", f: 35, dur: 115, s: 70, c: COLORS.textWhite, glow: 'rgba(255,255,255,0.1)', x: 0, y: -60, rot: 0, anim: 'pop' },
 
-  { t: "8 ДНІВ", f: 55, dur: 95, s: 90, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: -140, y: 180, rot: -3, anim: 'slideUp' },
-  { t: "48 ГОДИН", f: 75, dur: 75, s: 90, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: 140, y: 180, rot: 2, anim: 'slideLeft' },
+  // Блок 4: Раздвинуты максимально по краям X (-240 и +240)
+  { t: "8 ДНІВ", f: 60, dur: 90, s: 80, c: COLORS.accentPink, glow: 'rgba(224, 112, 162, 0.4)', x: -240, y: 260, rot: -2, anim: 'slideUp' },
+  { t: "48 ГОДИН", f: 75, dur: 75, s: 80, c: COLORS.accentCyan, glow: 'rgba(6, 182, 212, 0.4)', x: 240, y: 260, rot: 2, anim: 'slideUp' },
 
-  { t: "ПРАКТИКИ", f: 100, dur: 50, s: 120, c: COLORS.accentGreen, glow: 'rgba(16, 185, 129, 0.5)', x: 0, y: 320, rot: 0, anim: 'overshoot' },
+  // Блок 5: Низ
+  { t: "ПРАКТИКИ", f: 100, dur: 50, s: 130, c: COLORS.accentGreen, glow: 'rgba(16, 185, 129, 0.5)', x: 0, y: 440, rot: 0, anim: 'overshoot' },
 ];
 
 const ICONS = [
-  { paths: ICON_PATHS.calendar, colors: [COLORS.accentPink, COLORS.accentPink, COLORS.accentPink, COLORS.accentPink], f: 60, dur: 90, x: -140, y: 80, s: 3.5, glow: 'rgba(224, 112, 162, 0.4)' },
-  { paths: ICON_PATHS.clock, colors: [COLORS.accentCyan, COLORS.accentCyan], f: 80, dur: 70, x: 140, y: 80, s: 3.5, glow: 'rgba(6, 182, 212, 0.4)' }
+  // Иконки висят ровно над текстом "8 днів" и "48 годин"
+  { paths: ICON_PATHS.calendar, colors: [COLORS.accentPink, COLORS.accentPink, COLORS.accentPink, COLORS.accentPink], f: 55, dur: 95, x: -240, y: 120, s: 3.5, glow: 'rgba(224, 112, 162, 0.4)' },
+  { paths: ICON_PATHS.clock, colors: [COLORS.accentCyan, COLORS.accentCyan], f: 70, dur: 80, x: 240, y: 120, s: 3.5, glow: 'rgba(6, 182, 212, 0.4)' }
 ];
 
 const LINES = [
-  { d: "M 0 -20 Q -140 30 -140 80", c: COLORS.accentPink, f: 65, dur: 85 },
-  { d: "M 0 -20 Q 140 30 140 80", c: COLORS.accentCyan, f: 85, dur: 65 },
-  { d: "M -140 180 Q 0 250 0 320", c: COLORS.accentGreen, f: 105, dur: 45 },
-  { d: "M 140 180 Q 0 250 0 320", c: COLORS.accentGreen, f: 105, dur: 45 },
+  // Линии аккуратно огибают текст, не перечеркивая его
+  { d: "M 0 -20 Q -240 40 -240 80", c: COLORS.accentPink, f: 60, dur: 90 }, // От "це" к календарю
+  { d: "M 0 -20 Q 240 40 240 80", c: COLORS.accentCyan, f: 75, dur: 75 },   // От "це" к часам
+  { d: "M -240 320 Q 0 360 0 390", c: COLORS.accentGreen, f: 105, dur: 45 }, // От "8 дней" к практике
+  { d: "M 240 320 Q 0 360 0 390", c: COLORS.accentGreen, f: 105, dur: 45 },  // От "48 часов" к практике
 ];
 
 // =============================================================================
@@ -249,9 +257,10 @@ const KineticWord: React.FC<{ word: typeof WORDS[0] }> = ({ word }) => {
 const CeltaPartOne: React.FC = () => {
   const frame = useCurrentFrame();
 
-  // Subtle continuous zoom and slam shakes
+  // Плавный зум камеры всей сцены
   const segmentZoom = interpolate(frame, [0, 150], [1, 1.05], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
   
+  // Тряска камеры при ударе слова CELTA
   let shakeX = 0;
   if (frame >= 18 && frame <= 24) {
     shakeX = interpolate(frame, [18, 20, 22, 24], [0, -15, 15, 0], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
